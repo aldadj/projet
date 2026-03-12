@@ -1,0 +1,76 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
+use App\Models\Contact;
+use Illuminate\Http\Request;
+
+/*
+|--------------------------------------------------------------------------
+| ROUTES PUBLIQUES (Accessibles par tous)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/', [ArticleController::class, 'index'])->name('home');
+Route::get('/article/{slug}', [ArticleController::class, 'show'])->name('article.show');
+Route::get('/categorie/{slug}', [ArticleController::class, 'category'])->name('category.show');
+
+// Page Contact
+Route::get('/contact', function () {
+    $categories = \App\Models\Category::all();
+    return view('contact', compact('categories'));
+})->name('contact');
+
+Route::post('/contact', function (Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'subject' => 'required|string|max:255',
+        'message' => 'required',
+    ]);
+    Contact::create($validated);
+    return back()->with('success', 'Votre message a bien été envoyé !');
+})->name('contact.store');
+
+// Page Qui Sommes-Nous
+Route::get('/qui-sommes-nous', function () {
+    $qsn = \App\Models\Setting::where('key', 'qsn_content')->first();
+    $categories = \App\Models\Category::all();
+    return view('qsn', compact('qsn', 'categories'));
+})->name('qsn');
+
+/*
+|--------------------------------------------------------------------------
+| ROUTES D'AUTHENTIFICATION
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post'); // Ajout du nom ici
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| ROUTES ADMINISTRATION (Protégées par login)
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // Articles
+    Route::get('/article/create', [AdminController::class, 'createArticle'])->name('article.create');
+    Route::post('/article/store', [AdminController::class, 'storeArticle'])->name('article.store');
+    Route::get('/article/{id}/edit', [AdminController::class, 'editArticle'])->name('article.edit');
+    Route::post('/article/{id}/update', [AdminController::class, 'updateArticle'])->name('article.update');
+    Route::delete('/article/{id}', [AdminController::class, 'deleteArticle'])->name('article.delete');
+    
+    // QSN
+    Route::get('/qsn', [AdminController::class, 'editQsn'])->name('qsn.edit');
+    Route::post('/qsn', [AdminController::class, 'updateQsn'])->name('qsn.update');
+    
+    // Messages
+    Route::get('/message/{id}', [AdminController::class, 'showMessage'])->name('message.show');
+});
