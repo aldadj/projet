@@ -65,13 +65,16 @@ class AdminController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // Augmenté à 5MB
         ]);
 
         // Gestion de l'image
-        // Modification pour Render : Upload sur Cloudinary au lieu du stockage local
-        $result = $request->file('image')->storeOnCloudinary('actupress_articles');
-        $imageUrl = $result->getSecurePath();
+        try {
+            $result = $request->file('image')->storeOnCloudinary('actupress_articles');
+            $imageUrl = $result->getSecurePath();
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['image' => 'Erreur Cloudinary : ' . $e->getMessage()]);
+        }
 
         // Si on coche "A la une", on décoche l'ancien article à la une
         if ($request->has('is_headline')) {
@@ -113,19 +116,19 @@ class AdminController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048', // L'image n'est pas obligatoire lors de la modification
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $data = $request->only(['title', 'content', 'category_id']);
 
         // Gestion de l'image si une nouvelle est fournie
         if ($request->hasFile('image')) {
-            // Suppression de l'ancienne image si elle existe
-            // Note: Sur Cloudinary, la suppression est différente. On laisse l'ancienne pour l'instant pour éviter les erreurs.
-            // if ($article->image) { ... }
-
-            $result = $request->file('image')->storeOnCloudinary('actupress_articles');
-            $data['image'] = $result->getSecurePath();
+            try {
+                $result = $request->file('image')->storeOnCloudinary('actupress_articles');
+                $data['image'] = $result->getSecurePath();
+            } catch (\Exception $e) {
+                return back()->withInput()->withErrors(['image' => 'Erreur upload : ' . $e->getMessage()]);
+            }
         }
 
         // Si on coche "A la une", on décoche l'ancien article à la une
