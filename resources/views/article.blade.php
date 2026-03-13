@@ -30,7 +30,7 @@
     <div class="flex flex-col md:flex-row gap-6 mb-8">
         {{-- Image de l'article avec vérification Cloudinary --}}
         <div class="w-full md:w-1/3 h-64 bg-gray-700 rounded-xl overflow-hidden shadow-lg">
-            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" 
+            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset($article->image) }}" 
                  class="w-full h-full object-cover" 
                  alt="{{ $article->title }}">
         </div>
@@ -61,7 +61,7 @@
             @foreach($similaires as $item)
                 <a href="{{ route('article.show', $item->slug) }}" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
                     {{-- Image des articles similaires avec vérification Cloudinary --}}
-                    <img src="{{ str_starts_with($item->image, 'http') ? $item->image : asset('storage/' . $item->image) }}" 
+                    <img src="{{ str_starts_with($item->image, 'http') ? $item->image : asset($item->image) }}" 
                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>

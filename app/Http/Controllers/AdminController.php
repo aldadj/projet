@@ -69,7 +69,9 @@ class AdminController extends Controller
         ]);
 
         // Gestion de l'image
-        $imagePath = $request->file('image')->store('articles', 'public');
+        // Modification pour Render : Upload sur Cloudinary au lieu du stockage local
+        $result = $request->file('image')->storeOnCloudinary('actupress_articles');
+        $imageUrl = $result->getSecurePath();
 
         // Si on coche "A la une", on décoche l'ancien article à la une
         if ($request->has('is_headline')) {
@@ -89,7 +91,7 @@ class AdminController extends Controller
             'slug' => $slug,
             'content' => $request->content,
             'category_id' => $request->category_id,
-            'image' => '/storage/' . $imagePath,
+            'image' => $imageUrl, // On stocke l'URL complète de Cloudinary
             'is_headline' => $request->has('is_headline'),
         ]);
 
@@ -119,12 +121,11 @@ class AdminController extends Controller
         // Gestion de l'image si une nouvelle est fournie
         if ($request->hasFile('image')) {
             // Suppression de l'ancienne image si elle existe
-            if ($article->image) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $article->image));
-            }
+            // Note: Sur Cloudinary, la suppression est différente. On laisse l'ancienne pour l'instant pour éviter les erreurs.
+            // if ($article->image) { ... }
 
-            $imagePath = $request->file('image')->store('articles', 'public');
-            $data['image'] = '/storage/' . $imagePath;
+            $result = $request->file('image')->storeOnCloudinary('actupress_articles');
+            $data['image'] = $result->getSecurePath();
         }
 
         // Si on coche "A la une", on décoche l'ancien article à la une
