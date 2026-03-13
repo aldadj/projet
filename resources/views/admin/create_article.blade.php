@@ -20,7 +20,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.article.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
         <div>
