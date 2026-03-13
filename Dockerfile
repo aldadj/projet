@@ -40,4 +40,10 @@ RUN rm -rf storage/framework/cache/data/*
 RUN rm -rf storage/framework/views/*.php
 RUN rm -rf storage/framework/sessions/*
 
+# Active le module rewrite d'Apache
+RUN a2enmod rewrite
+
+# Autorise le .htaccess à surcharger la configuration Apache
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
 EXPOSE 80
