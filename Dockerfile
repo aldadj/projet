@@ -34,4 +34,9 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 # Installation des dépendances Laravel
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs --no-scripts
 
+# NETTOYAGE DU CACHE (Ajoute ces lignes ici)
+RUN php artisan config:clear
+RUN php artisan cache:clear
+RUN php artisan route:clear
+
 EXPOSE 80
