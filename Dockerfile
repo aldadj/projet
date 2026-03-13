@@ -46,4 +46,8 @@ RUN a2enmod rewrite
 # Autorise le .htaccess à surcharger la configuration Apache
 RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
+# Donne les droits d'écriture à Apache sur la base de données SQLite
+RUN chown -R www-data:www-data /var/www/html/database
+RUN chmod -R 775 /var/www/html/database
+
 EXPOSE 80
