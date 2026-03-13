@@ -50,4 +50,11 @@ RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 RUN chown -R www-data:www-data /var/www/html/database
 RUN chmod -R 775 /var/www/html/database
 
+# Création du lien symbolique pour le stockage des images
+RUN php artisan storage:link
+
+# Permissions pour le dossier storage
+RUN chown -R www-data:www-data /var/www/html/storage
+RUN chmod -R 775 /var/www/html/storage
+
 EXPOSE 80

@@ -15,15 +15,15 @@
     ];
 @endphp
 
-<div class="grid grid-cols-12 gap-6">
-    
-    {{-- On ajoute data-total ici pour que le JS puisse le lire sans erreur --}}
+<div class="grid grid-cols-12 gap-6"> 
     <div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
         <div class="h-80 overflow-hidden rounded-2xl shadow-xl relative group">
             <div id="headline-slider" data-total="{{ $headlines->count() }}" class="flex h-full transition-transform duration-700 ease-in-out">
                 @foreach($headlines as $headline)
                     <a href="{{ route('article.show', $headline->slug) }}" class="min-w-full h-full relative block">
-                        <img src="{{ asset($headline->image) }}" class="w-full h-full object-cover">
+                        {{-- Logique d'image hybride --}}
+                        <img src="{{ str_starts_with($headline->image, 'http') ? $headline->image : asset('storage/' . $headline->image) }}" 
+                             class="w-full h-full object-cover">
                         
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
@@ -68,7 +68,7 @@
         @foreach($articles->take(2) as $f_article)
             <a href="{{ route('article.show', $f_article->slug) }}" class="group relative block w-full h-64 lg:h-1/2 rounded-2xl overflow-hidden shadow-xl">
                 @if($f_article->image)
-                    <img src="{{ asset($f_article->image) }}" 
+                    <img src="{{ str_starts_with($f_article->image, 'http') ? $f_article->image : asset('storage/' . $f_article->image) }}" 
                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                          alt="{{ $f_article->title }}">
                 @else
@@ -97,7 +97,8 @@
     <div class="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
         @foreach($articles->skip(2)->take(6) as $article)
             <a href="{{ route('article.show', $article->slug) }}" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
-                <img src="{{ asset($article->image) }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" 
+                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                 
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
@@ -118,10 +119,11 @@
         @endforeach
     </div>
 
+    {{-- Section En Direct --}}
     <div class="col-span-12 lg:col-span-4 bg-gray-800 border border-gray-700 p-4 rounded-xl shadow-lg h-fit">
         <h2 class="font-bold border-b-2 border-blue-500 mb-4 text-center pb-2 uppercase text-blue-400">En direct</h2>
         <div class="space-y-4">
-            @foreach($articles->take(2) as $flash)
+            @foreach($articles->take(5) as $flash)
                 <div class="text-xs border-b border-gray-700 pb-2 group cursor-pointer">
                     <span class="text-red-400 font-bold">{{ $flash->created_at->format('H:i') }}</span>
                     <p class="text-gray-300 group-hover:text-white transition-colors mt-1">{{ $flash->title }}</p>
@@ -134,9 +136,7 @@
     </div>
 </div>
 
-   <script>
-    /* eslint-disable */
-    // @ts-nocheck
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const slider = document.getElementById('headline-slider');
         if (!slider) return;
@@ -144,8 +144,6 @@
         const dots = document.querySelectorAll('.slider-dot');
         const prevBtn = document.getElementById('prev-slide');
         const nextBtn = document.getElementById('next-slide');
-        
-        // On récupère la valeur depuis l'attribut HTML pour éviter le PHP dans le JS
         const totalSlides = parseInt(slider.dataset.total || "0", 10);
         
         if (totalSlides <= 1) return;
@@ -190,8 +188,6 @@
 
         startAutoSlide();
     });
-    
 </script>
-
 
 @endsection

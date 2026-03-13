@@ -59,6 +59,14 @@ return [
             'throw' => false,
             'report' => false,
         ],
+        'cloudinary' => [
+            'driver' => 'cloudinary',
+        ],
+
+        's3' => [
+            'driver' => 's3',
+            // ... reste du code s3
+        ],
 
     ],
 

@@ -10,6 +10,7 @@
         'economie' => 'bg-yellow-600',
     ];
 @endphp
+
 <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
     <div>
         <h1 class="text-3xl font-bold text-white uppercase border-b-4 border-blue-500 inline-block pb-2">
@@ -25,7 +26,10 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     @forelse($articles as $article)
         <a href="{{ route('article.show', $article->slug) }}" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
-            <img src="{{ $article->image }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            {{-- Image avec vérification Cloudinary (http) ou Local (storage) --}}
+            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" 
+                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                 alt="{{ $article->title }}">
             
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
