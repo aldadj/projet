@@ -1,1 +1,14 @@
-node_modules
+/node_modules
+/public/storage
+/storage/*.key
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*.php
+/storage/logs/*.log
+/vendor
+.env
+.env.backup
+.env.production
+composer.lock
+database/database.sqlite
