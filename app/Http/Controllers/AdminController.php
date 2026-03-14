@@ -158,7 +158,7 @@ class AdminController extends Controller
     {
         $article = Article::findOrFail($id);
 
-        if ($article->image) {
+        if ($article->image && !str_starts_with($article->image, 'http')) {
             Storage::disk('public')->delete(str_replace('/storage/', '', $article->image));
         }
 

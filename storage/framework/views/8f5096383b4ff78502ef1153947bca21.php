@@ -13,15 +13,15 @@
     ];
 ?>
 
-<div class="grid grid-cols-12 gap-6">
-    
-    
+<div class="grid grid-cols-12 gap-6"> 
     <div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
         <div class="h-80 overflow-hidden rounded-2xl shadow-xl relative group">
             <div id="headline-slider" data-total="<?php echo e($headlines->count()); ?>" class="flex h-full transition-transform duration-700 ease-in-out">
                 <?php $__currentLoopData = $headlines; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $headline): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <a href="<?php echo e(route('article.show', $headline->slug)); ?>" class="min-w-full h-full relative block">
-                        <img src="<?php echo e(asset($headline->image)); ?>" class="w-full h-full object-cover">
+                        
+                        <img src="<?php echo e(str_starts_with($headline->image, 'http') ? $headline->image : asset($headline->image)); ?>" 
+                             class="w-full h-full object-cover">
                         
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
@@ -69,7 +69,7 @@
         <?php $__currentLoopData = $articles->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $f_article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <a href="<?php echo e(route('article.show', $f_article->slug)); ?>" class="group relative block w-full h-64 lg:h-1/2 rounded-2xl overflow-hidden shadow-xl">
                 <?php if($f_article->image): ?>
-                    <img src="<?php echo e(asset($f_article->image)); ?>" 
+                    <img src="<?php echo e(str_starts_with($f_article->image, 'http') ? $f_article->image : asset($f_article->image)); ?>" 
                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                          alt="<?php echo e($f_article->title); ?>">
                 <?php else: ?>
@@ -101,7 +101,8 @@
     <div class="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <?php $__currentLoopData = $articles->skip(2)->take(6); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
-                <img src="<?php echo e(asset($article->image)); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset($article->image)); ?>" 
+                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                 
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
@@ -125,10 +126,11 @@
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
+    
     <div class="col-span-12 lg:col-span-4 bg-gray-800 border border-gray-700 p-4 rounded-xl shadow-lg h-fit">
         <h2 class="font-bold border-b-2 border-blue-500 mb-4 text-center pb-2 uppercase text-blue-400">En direct</h2>
         <div class="space-y-4">
-            <?php $__currentLoopData = $articles->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $flash): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php $__currentLoopData = $articles->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $flash): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="text-xs border-b border-gray-700 pb-2 group cursor-pointer">
                     <span class="text-red-400 font-bold"><?php echo e($flash->created_at->format('H:i')); ?></span>
                     <p class="text-gray-300 group-hover:text-white transition-colors mt-1"><?php echo e($flash->title); ?></p>
@@ -141,9 +143,7 @@
     </div>
 </div>
 
-   <script>
-    /* eslint-disable */
-    // @ts-nocheck
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const slider = document.getElementById('headline-slider');
         if (!slider) return;
@@ -151,8 +151,6 @@
         const dots = document.querySelectorAll('.slider-dot');
         const prevBtn = document.getElementById('prev-slide');
         const nextBtn = document.getElementById('next-slide');
-        
-        // On récupère la valeur depuis l'attribut HTML pour éviter le PHP dans le JS
         const totalSlides = parseInt(slider.dataset.total || "0", 10);
         
         if (totalSlides <= 1) return;
@@ -197,9 +195,7 @@
 
         startAutoSlide();
     });
-    
 </script>
-
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\alisn\Desktop\LARAVEL\projet\resources\views/welcome.blade.php ENDPATH**/ ?>

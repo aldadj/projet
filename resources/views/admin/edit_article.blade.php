@@ -63,7 +63,7 @@
                     
                     @if($article->image)
                         <div class="mb-4 relative group">
-                            <img src="{{ asset($article->image) }}" class="w-full h-auto rounded-lg shadow-sm border border-gray-700">
+                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset($article->image) }}" class="w-full h-auto rounded-lg shadow-sm border border-gray-700">
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg">
                                 <span class="text-white text-sm font-bold">Image actuelle</span>
                             </div>
