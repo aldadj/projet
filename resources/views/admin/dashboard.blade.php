@@ -73,8 +73,8 @@
                     <div class="h-40 overflow-hidden relative">
                          @if($article->image)
                             <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset($article->image) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                         @else
-                            <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-600 font-bold">Sans Image</div>
+                       @else
+                            <img src="{{ asset('images/default.jpg') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                          @endif
                          
                          @if($article->is_headline)

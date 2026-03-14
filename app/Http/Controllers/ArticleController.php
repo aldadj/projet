@@ -66,34 +66,5 @@ class ArticleController extends Controller
     /**
      * Enregistre un nouvel article (Upload vers Cloudinary).
      */
-    public function store(Request $request)
-    {
-        // 1. Validation des entrées
-        $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
-        ]);
-
-        try {
-            // 2. Envoi de l'image sur Cloudinary
-            $result = $request->file('image')->storeOnCloudinary('actupress_articles');
-            $imageUrl = $result->getSecurePath();
-
-            // 3. Création de l'article avec l'URL sécurisée
-            Article::create([
-                'title' => $request->title,
-                'slug' => Str::slug($request->title) . '-' . time(),
-                'content' => $request->content,
-                'category_id' => $request->category_id,
-                'image' => $imageUrl, 
-            ]);
-
-            return redirect()->route('home')->with('success', 'L\'article a été publié avec succès sur ActuPress !');
-
-        } catch (\Exception $e) {
-            return redirect()->back()->withInput()->withErrors(['image' => 'Erreur Cloudinary : ' . $e->getMessage()]);
-        }
-    }
+   
 }

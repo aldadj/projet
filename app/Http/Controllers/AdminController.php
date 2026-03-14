@@ -60,46 +60,46 @@ class AdminController extends Controller
     }
 
     public function storeArticle(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // Augmenté à 5MB
-        ]);
+{
+    $request->validate([
+        'title' => 'required|max:255',
+        'content' => 'required',
+        'category_id' => 'required|exists:categories,id',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+    ]);
 
-        // Gestion de l'image
-        try {
-            $result = $request->file('image')->storeOnCloudinary('actupress_articles');
-            $imageUrl = $result->getSecurePath();
-        } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['image' => 'Erreur Cloudinary : ' . $e->getMessage()]);
-        }
-
-        // Si on coche "A la une", on décoche l'ancien article à la une
-        if ($request->has('is_headline')) {
-            Article::where('is_headline', true)->update(['is_headline' => false]);
-        }
-
-        // Création d'un slug unique pour éviter les conflits
-        $slug = Str::slug($request->title);
-        $count = 1;
-        while (Article::where('slug', $slug)->exists()) {
-            $slug = Str::slug($request->title) . '-' . $count;
-            $count++;
-        }
-
-        Article::create([
-            'title' => $request->title,
-            'slug' => $slug,
-            'content' => $request->content,
-            'category_id' => $request->category_id,
-            'image' => $imageUrl, // On stocke l'URL complète de Cloudinary
-            'is_headline' => $request->has('is_headline'),
-        ]);
-
-        return redirect()->route('admin.dashboard')->with('success', 'Article publié avec succès !');
+    try {
+        // On utilise Cloudinary même en local
+        $result = $request->file('image')->storeOnCloudinary('actupress_articles');
+        $imageUrl = $result->getSecurePath(); 
+    } catch (\Exception $e) {
+        return back()->withInput()->withErrors(['image' => 'Erreur Cloudinary : ' . $e->getMessage()]);
     }
+
+    // Gestion du Headline
+    if ($request->has('is_headline')) {
+        \App\Models\Article::where('is_headline', true)->update(['is_headline' => false]);
+    }
+
+    // Slug Unique
+    $slug = \Illuminate\Support\Str::slug($request->title);
+    $count = 1;
+    while (\App\Models\Article::where('slug', $slug)->exists()) {
+        $slug = \Illuminate\Support\Str::slug($request->title) . '-' . $count;
+        $count++;
+    }
+
+    \App\Models\Article::create([
+        'title' => $request->title,
+        'slug' => $slug,
+        'content' => $request->content,
+        'category_id' => $request->category_id,
+        'image' => $imageUrl, // URL Cloudinary directe
+        'is_headline' => $request->has('is_headline'),
+    ]);
+
+    return redirect()->route('admin.dashboard')->with('success', 'Article publié sur Cloudinary !');
+}
 
     public function editArticle($id)
     {

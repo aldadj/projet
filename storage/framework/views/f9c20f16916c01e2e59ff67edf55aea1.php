@@ -10,6 +10,7 @@
         'economie' => 'bg-yellow-600',
     ];
 ?>
+
 <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
     <div>
         <h1 class="text-3xl font-bold text-white uppercase border-b-4 border-blue-500 inline-block pb-2">
@@ -26,7 +27,9 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <?php $__empty_1 = true; $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
         <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
-            <img src="<?php echo e($article->image); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            
+            <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset(str_replace('storage/', '', $article->image))); ?>" 
+            class="w-full h-full object-cover">
             
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 

@@ -71,7 +71,7 @@
                     <img src="{{ str_starts_with($f_article->image, 'http') ? $f_article->image : asset($f_article->image) }}" 
                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                          alt="{{ $f_article->title }}">
-                @else
+           @else
                     <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">Image non disponible</div>
                 @endif
                 
@@ -97,8 +97,8 @@
     <div class="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
         @foreach($articles->skip(2)->take(6) as $article)
             <a href="{{ route('article.show', $article->slug) }}" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
-                <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset($article->image) }}" 
-                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset(str_replace('storage/', '', $article->image)) }}" 
+                class="w-full h-full object-cover">
                 
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 

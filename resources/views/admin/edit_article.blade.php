@@ -63,12 +63,12 @@
                     
                     @if($article->image)
                         <div class="mb-4 relative group">
-                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset($article->image) }}" class="w-full h-auto rounded-lg shadow-sm border border-gray-700">
-                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg">
+                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset(str_replace('storage/', '', $article->image)) }}"
+                                 class="h-32 w-32 object-cover rounded-lg border border-gray-600" onerror="this.src='{{ asset('images/default.jpg') }}'">
                                 <span class="text-white text-sm font-bold">Image actuelle</span>
                             </div>
                         </div>
-                    @endif
+           @endif
 
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-gray-500 transition-colors">
                         <div class="space-y-1 text-center">

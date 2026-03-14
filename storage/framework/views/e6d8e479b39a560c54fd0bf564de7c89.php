@@ -72,8 +72,8 @@
                 <div class="group bg-gray-900 rounded-xl border border-gray-700 overflow-hidden hover:border-gray-500 transition-all shadow-lg hover:shadow-2xl flex flex-col">
                     <div class="h-40 overflow-hidden relative">
                          <?php if($article->image): ?>
-                            <img src="<?php echo e(asset($article->image)); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                         <?php else: ?>
+                            <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset($article->image)); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                       <?php else: ?>
                             <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-600 font-bold">Sans Image</div>
                          <?php endif; ?>
                          
