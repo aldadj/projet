@@ -63,8 +63,7 @@
                     
                     @if($article->image)
                         <div class="mb-4 relative group">
-                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset(str_replace('storage/', '', $article->image)) }}"
-                                 class="h-32 w-32 object-cover rounded-lg border border-gray-600" onerror="this.src='{{ asset('images/default.jpg') }}'">
+                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" alt="{{ $article->title }}">
                                 <span class="text-white text-sm font-bold">Image actuelle</span>
                             </div>
                         </div>

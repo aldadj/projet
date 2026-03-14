@@ -48,6 +48,11 @@
             <input type="file" id="image" name="image" class="w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer" required>
         </div>
 
+        <div id="preview-container" class="hidden mt-4">
+            <p class="text-sm font-bold mb-2 text-slate-300 uppercase tracking-wider">Aperçu de l'image :</p>
+            <img id="image-preview" src="#" class="h-40 w-full object-cover rounded-lg border border-slate-600">
+        </div>
+
         <div class="flex items-center pt-2">
             <input type="checkbox" id="is_headline" name="is_headline" value="1" {{ old('is_headline') ? 'checked' : '' }} class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-blue-600 focus:ring-blue-500">
             <label for="is_headline" class="ml-3 block text-sm text-slate-300">Mettre cet article "À la une"</label>
@@ -61,3 +66,13 @@
     </form>
 </div>
 @endsection
+
+<script>
+    document.getElementById('image').onchange = evt => {
+        const [file] = document.getElementById('image').files
+        if (file) {
+            document.getElementById('preview-container').classList.remove('hidden');
+            document.getElementById('image-preview').src = URL.createObjectURL(file)
+        }
+    }
+</script>

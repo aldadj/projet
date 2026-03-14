@@ -27,8 +27,8 @@
     @forelse($articles as $article)
         <a href="{{ route('article.show', $article->slug) }}" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
             {{-- Image avec vérification Cloudinary (http) ou Local (storage) --}}
-            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset(str_replace('storage/', '', $article->image)) }}" 
-                 class="w-full h-full object-cover" onerror="this.src='{{ asset('images/default.jpg') }}'">
+            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}"
+            alt="{{ $article->title }}">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
             <div class="absolute bottom-0 left-0 w-full p-4 text-white">
