@@ -5,7 +5,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\qsnController;
+use App\Http\Controllers\QsnController;
 use Illuminate\Http\Request;
 
 /*
@@ -24,7 +24,7 @@ Route::get('/contact', [ContactController::class, 'view_contact'])->name('contac
 Route::post('/contact', [ContactController::class, 'store_contact'])->name('contact.store');
 
 // Page Qui Sommes-Nous
-Route::get('/qui-sommes-nous', [qsnController::class, 'view_qsn'])->name('qsn');
+Route::get('/qui-sommes-nous', [QsnController::class, 'view_qsn'])->name('qsn');
 
 /*
 |--------------------------------------------------------------------------
