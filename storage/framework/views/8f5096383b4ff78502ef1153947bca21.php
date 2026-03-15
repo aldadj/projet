@@ -20,7 +20,7 @@
                 <?php $__currentLoopData = $headlines; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $headline): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <a href="<?php echo e(route('article.show', $headline->slug)); ?>" class="min-w-full h-full relative block">
                         
-                        <img src="<?php echo e(str_starts_with($headline->image, 'http') ? $headline->image : asset($headline->image)); ?>" 
+                        <img src="<?php echo e(str_starts_with($headline->image, 'http') ? $headline->image : asset('storage/' . $headline->image)); ?>"
                              class="w-full h-full object-cover">
                         
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
@@ -69,10 +69,9 @@
         <?php $__currentLoopData = $articles->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $f_article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <a href="<?php echo e(route('article.show', $f_article->slug)); ?>" class="group relative block w-full h-64 lg:h-1/2 rounded-2xl overflow-hidden shadow-xl">
                 <?php if($f_article->image): ?>
-                    <img src="<?php echo e(str_starts_with($f_article->image, 'http') ? $f_article->image : asset($f_article->image)); ?>" 
-                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                         alt="<?php echo e($f_article->title); ?>">
-                <?php else: ?>
+                <img src="<?php echo e(str_starts_with($f_article->image, 'http') ? $f_article->image : asset('storage/' . $f_article->image)); ?>"
+                alt="<?php echo e($f_article->title); ?>">
+           <?php else: ?>
                     <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">Image non disponible</div>
                 <?php endif; ?>
                 
@@ -101,7 +100,7 @@
     <div class="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <?php $__currentLoopData = $articles->skip(2)->take(6); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
-                <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset(str_replace('storage/', '', $article->image))); ?>" 
+                <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>"
                 class="w-full h-full object-cover">
                 
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>

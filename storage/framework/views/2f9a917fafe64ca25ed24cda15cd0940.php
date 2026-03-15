@@ -62,12 +62,12 @@
                     <label class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wider">Image de couverture</label>
                     
                     <?php if($article->image): ?>
-                    <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset(str_replace('storage/', '', $article->image))); ?>" 
-                    class="h-32 w-32 object-cover rounded-lg border border-gray-600">
+                        <div class="mb-4 relative group">
+                            <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>" alt="<?php echo e($article->title); ?>">
                                 <span class="text-white text-sm font-bold">Image actuelle</span>
                             </div>
                         </div>
-                    <?php endif; ?>
+           <?php endif; ?>
 
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-gray-500 transition-colors">
                         <div class="space-y-1 text-center">

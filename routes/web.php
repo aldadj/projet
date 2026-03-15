@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LoginController;
-use App\Models\Contact;
+use App\Http\Controllers\qsnController;
 use Illuminate\Http\Request;
 
 /*
@@ -18,28 +19,12 @@ Route::get('/article/{slug}', [ArticleController::class, 'show'])->name('article
 Route::get('/categorie/{slug}', [ArticleController::class, 'category'])->name('category.show');
 
 // Page Contact
-Route::get('/contact', function () {
-    $categories = \App\Models\Category::all();
-    return view('contact', compact('categories'));
-})->name('contact');
+Route::get('/contact', [ContactController::class, 'view_contact'])->name('contact');
 
-Route::post('/contact', function (Request $request) {
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email',
-        'subject' => 'required|string|max:255',
-        'message' => 'required',
-    ]);
-    Contact::create($validated);
-    return back()->with('success', 'Votre message a bien été envoyé !');
-})->name('contact.store');
+Route::post('/contact', [ContactController::class, 'store_contact'])->name('contact.store');
 
 // Page Qui Sommes-Nous
-Route::get('/qui-sommes-nous', function () {
-    $qsn = \App\Models\Setting::where('key', 'qsn_content')->first();
-    $categories = \App\Models\Category::all();
-    return view('qsn', compact('qsn', 'categories'));
-})->name('qsn');
+Route::get('/qui-sommes-nous', [qsnController::class, 'view_qsn'])->name('qsn');
 
 /*
 |--------------------------------------------------------------------------
