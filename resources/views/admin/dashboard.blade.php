@@ -134,12 +134,21 @@
                 </thead>
                 <tbody class="divide-y divide-gray-700">
                     @forelse($messages as $msg)
-                    <tr class="hover:bg-gray-700/50 transition-colors">
-                        <td class="p-4 font-medium text-white">{{ $msg->name }}</td>
-                        <td class="p-4">{{ $msg->subject }}</td>
+                    <tr class="hover:bg-gray-700/50 transition-colors {{ !$msg->is_read ? 'bg-gray-700/30' : '' }}">
+                        <td class="p-4 font-medium">
+                            <div class="flex items-center gap-3">
+                                @if(!$msg->is_read)
+                                    <span class="h-2 w-2 rounded-full bg-blue-500 flex-shrink-0" title="Non lu"></span>
+                                @else
+                                    <span class="h-2 w-2 rounded-full bg-transparent flex-shrink-0"></span>
+                                @endif
+                                <span class="{{ !$msg->is_read ? 'text-white font-semibold' : 'text-gray-400' }}">{{ $msg->name }}</span>
+                            </div>
+                        </td>
+                        <td class="p-4 {{ !$msg->is_read ? 'text-gray-200' : 'text-gray-400' }}">{{ $msg->subject }}</td>
                         <td class="p-4 text-sm text-gray-400">{{ $msg->created_at->format('d/m H:i') }}</td>
                         <td class="p-4 text-right">
-                            <a href="{{ route('admin.message.show', $msg->id) }}" class="text-blue-400 hover:text-white font-bold text-sm transition-colors">Lire</a>
+                            <a href="{{ route('admin.message.show', $msg->id) }}" class="bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 px-3 py-1.5 rounded-md font-bold text-sm transition-colors">Lire</a>
                         </td>
                     </tr>
                     @empty

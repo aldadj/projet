@@ -28,7 +28,8 @@ class AdminController extends Controller
     public function showMessage($id)
     {
         $message = Contact::findOrFail($id);
-        $message->update(['is_read' => true]);
+        $message->is_read = true;
+        $message->save();
         $categories = Category::all();
         
         return view('admin.show_message', compact('message', 'categories'));

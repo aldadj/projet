@@ -19,21 +19,18 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @forelse($articles as $article)
-        <a href="{{ route('article.show', $article->slug) }}" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
-            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-            
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
-
-            <div class="absolute bottom-0 left-0 w-full p-4 text-white">
-                <span class="inline-block {{ $categoryColors[$article->category->slug] ?? 'bg-gray-600' }} text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-2 shadow-sm">
+        <a href="{{ route('article.show', $article->slug) }}" class="group bg-gray-800/70 hover:bg-gray-800 transition-colors rounded-2xl shadow-lg overflow-hidden flex flex-col border border-gray-700/50 hover:border-blue-500/50">
+            <div class="h-48 overflow-hidden">
+                <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+            </div>
+            <div class="p-4 flex flex-col flex-grow">
+                <span class="inline-block {{ $categoryColors[$article->category->slug] ?? 'bg-gray-600' }} text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-3 shadow-sm self-start">
                     {{ $article->category->name }}
                 </span>
-
-                <h3 class="text-lg font-bold mb-1 leading-tight group-hover:text-red-400 transition-colors line-clamp-2">
+                <h3 class="text-md font-bold mb-2 leading-tight group-hover:text-blue-400 transition-colors line-clamp-3 flex-grow text-gray-100">
                     {{ $article->title }}
                 </h3>
-
-                <div class="flex items-center text-xs text-gray-400 font-medium">
+                <div class="flex items-center text-xs text-gray-400 font-medium mt-auto pt-2">
                     {{ $article->created_at->format('d/m/Y') }}
                 </div>
             </div>
