@@ -24,18 +24,29 @@
     </a>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
     <?php $__empty_1 = true; $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
         <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="group bg-gray-800/70 hover:bg-gray-800 transition-colors rounded-2xl shadow-lg overflow-hidden flex flex-col border border-gray-700/50 hover:border-blue-500/50">
-            <div class="h-48 overflow-hidden">
-                <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>" alt="<?php echo e($article->title); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            </div>
+            <?php if($article->image): ?>
+                <div class="h-48 overflow-hidden">
+                    <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>" alt="<?php echo e($article->title); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                </div>
+            <?php endif; ?>
             <div class="p-4 flex flex-col flex-grow">
                 
                 <h3 class="text-md font-bold mb-2 leading-tight group-hover:text-blue-400 transition-colors line-clamp-3 flex-grow text-gray-100">
                     <?php echo e($article->title); ?>
 
                 </h3>
+
+                <?php if(!$article->image): ?>
+                    <p class="text-gray-400 text-sm line-clamp-4 mb-3">
+                        <?php echo e($article->content); ?>
+
+                    </p>
+                    <span class="text-blue-400 text-xs font-bold uppercase hover:underline mt-auto">Voir plus &rarr;</span>
+                <?php endif; ?>
+
                 <div class="flex items-center text-xs text-gray-400 font-medium mt-auto pt-2">
                     <?php echo e($article->created_at->format('d/m/Y')); ?>
 

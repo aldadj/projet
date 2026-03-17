@@ -1,6 +1,6 @@
 <?php $__env->startSection('content'); ?>
 <style>
-    body { background-color: #0f172a !important; color: #e2e8f0; }
+    body { background-color: #ffffff !important; color: #e2e8f0; }
 </style>
 
 <?php
@@ -18,29 +18,50 @@
         <div class="h-80 overflow-hidden rounded-2xl shadow-xl relative group">
             <div id="headline-slider" data-total="<?php echo e($headlines->count()); ?>" class="flex h-full transition-transform duration-700 ease-in-out">
                 <?php $__currentLoopData = $headlines; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $headline): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <a href="<?php echo e(route('article.show', $headline->slug)); ?>" class="min-w-full h-full relative block">
+                    <a href="<?php echo e(route('article.show', $headline->slug)); ?>" class="min-w-full h-full relative block <?php echo e(!$headline->image ? 'bg-gray-800 p-8 flex flex-col justify-center' : ''); ?>">
                         
-                        <img src="<?php echo e(str_starts_with($headline->image, 'http') ? $headline->image : asset('storage/' . $headline->image)); ?>"
-                             class="w-full h-full object-cover">
-                        
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+                        <?php if($headline->image): ?>
+                            <img src="<?php echo e(str_starts_with($headline->image, 'http') ? $headline->image : asset('storage/' . $headline->image)); ?>"
+                                 class="w-full h-full object-cover">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
-                        <div class="absolute bottom-0 left-0 w-full p-4 text-white">
-                            <span class="inline-block <?php echo e($categoryColors[$headline->category->slug] ?? 'bg-gray-600'); ?> text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-2 shadow-sm">
-                                <?php echo e($headline->category->name); ?>
+                            <div class="absolute bottom-0 left-0 w-full p-4 text-white">
+                                <span class="inline-block <?php echo e($categoryColors[$headline->category->slug] ?? 'bg-gray-600'); ?> text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-2 shadow-sm">
+                                    <?php echo e($headline->category->name); ?>
 
-                            </span>
+                                </span>
 
-                            <h2 class="text-2xl font-bold mb-1 leading-tight hover:text-red-400 transition-colors">
-                                <?php echo e($headline->title); ?>
+                                <h2 class="text-2xl font-bold mb-1 leading-tight hover:text-red-400 transition-colors">
+                                    <?php echo e($headline->title); ?>
 
-                            </h2>
+                                </h2>
 
-                            <div class="flex items-center text-xs text-gray-400 font-medium">
-                                <?php echo e($headline->created_at->format('d/m/Y')); ?>
+                                <div class="flex items-center text-xs text-gray-400 font-medium">
+                                    <?php echo e($headline->created_at->format('d/m/Y')); ?>
 
+                                </div>
                             </div>
-                        </div>
+                        <?php else: ?>
+                            <div class="w-full">
+                                <span class="inline-block <?php echo e($categoryColors[$headline->category->slug] ?? 'bg-gray-600'); ?> text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-3 shadow-sm">
+                                    <?php echo e($headline->category->name); ?>
+
+                                </span>
+                                <h2 class="text-3xl font-bold mb-3 leading-tight text-white hover:text-red-400 transition-colors">
+                                    <?php echo e($headline->title); ?>
+
+                                </h2>
+                                <p class="text-gray-300 text-base line-clamp-3 mb-4 max-w-3xl">
+                                    <?php echo e($headline->content); ?>
+
+                                </p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-blue-400 text-sm font-bold uppercase hover:underline">Lire l'article &rarr;</span>
+                                    <span class="text-xs text-gray-500 font-medium"><?php echo e($headline->created_at->format('d/m/Y')); ?></span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </a>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
@@ -67,32 +88,49 @@
 
     <div class="col-span-12 lg:col-span-4 flex flex-col gap-4 h-auto lg:h-80">
         <?php $__currentLoopData = $articles->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $f_article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <a href="<?php echo e(route('article.show', $f_article->slug)); ?>" class="group relative block w-full h-64 lg:h-1/2 rounded-2xl overflow-hidden shadow-xl">
+            <a href="<?php echo e(route('article.show', $f_article->slug)); ?>" class="group relative block w-full h-64 lg:h-1/2 rounded-2xl overflow-hidden shadow-xl <?php echo e(!$f_article->image ? 'bg-gray-800 p-5 flex flex-col' : ''); ?>">
                 <?php if($f_article->image): ?>
-                <img src="<?php echo e(str_starts_with($f_article->image, 'http') ? $f_article->image : asset('storage/' . $f_article->image)); ?>"
-                alt="<?php echo e($f_article->title); ?>">
-           <?php else: ?>
-                    <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-500">Image non disponible</div>
-                <?php endif; ?>
-                
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+                    <img src="<?php echo e(str_starts_with($f_article->image, 'http') ? $f_article->image : asset('storage/' . $f_article->image)); ?>"
+                    alt="<?php echo e($f_article->title); ?>" class="w-full h-full object-cover">
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
-                <div class="absolute bottom-0 left-0 w-full p-4 text-white">
-                    <span class="inline-block <?php echo e($categoryColors[$f_article->category->slug] ?? 'bg-gray-600'); ?> text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-2 shadow-sm">
-                        <?php echo e($f_article->category->name); ?>
+                    <div class="absolute bottom-0 left-0 w-full p-4 text-white">
+                        <span class="inline-block <?php echo e($categoryColors[$f_article->category->slug] ?? 'bg-gray-600'); ?> text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-2 shadow-sm">
+                            <?php echo e($f_article->category->name); ?>
 
-                    </span>
+                        </span>
 
-                    <h3 class="text-lg font-bold mb-1 leading-tight group-hover:text-red-400 transition-colors line-clamp-2">
-                        <?php echo e($f_article->title); ?>
+                        <h3 class="text-lg font-bold mb-1 leading-tight group-hover:text-red-400 transition-colors line-clamp-2">
+                            <?php echo e($f_article->title); ?>
 
-                    </h3>
+                        </h3>
 
-                    <div class="flex items-center text-xs text-gray-400 font-medium">
-                        <?php echo e($f_article->created_at->format('d/m/Y')); ?>
+                        <div class="flex items-center text-xs text-gray-400 font-medium">
+                            <?php echo e($f_article->created_at->format('d/m/Y')); ?>
 
+                        </div>
                     </div>
-                </div>
+                <?php else: ?>
+                    <div class="flex-grow">
+                        <span class="inline-block <?php echo e($categoryColors[$f_article->category->slug] ?? 'bg-gray-600'); ?> text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-2 shadow-sm">
+                            <?php echo e($f_article->category->name); ?>
+
+                        </span>
+                        <h3 class="text-lg font-bold mb-2 leading-tight group-hover:text-blue-400 transition-colors line-clamp-2 text-white">
+                            <?php echo e($f_article->title); ?>
+
+                        </h3>
+                        <p class="text-gray-400 text-xs line-clamp-3 mb-2">
+                            <?php echo e($f_article->content); ?>
+
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between mt-auto">
+                        <span class="text-xs text-gray-500 font-medium"><?php echo e($f_article->created_at->format('d/m/Y')); ?></span>
+                        <span class="text-blue-400 text-xs font-bold uppercase hover:underline">Voir plus &rarr;</span>
+                    </div>
+                <?php endif; ?>
             </a>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
