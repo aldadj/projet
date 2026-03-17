@@ -93,7 +93,7 @@
         @endforeach
     </div>
 
-    <div class="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="col-span-12 lg:col-span-8 grid grid-cols-2 gap-4">
         @foreach($articles->skip(2)->take(6) as $article)
             <a href="{{ route('article.show', $article->slug) }}" class="group bg-gray-800/70 hover:bg-gray-800 transition-colors rounded-2xl shadow-lg overflow-hidden flex flex-col border border-gray-700/50 hover:border-blue-500/50">
                 @if($article->image)

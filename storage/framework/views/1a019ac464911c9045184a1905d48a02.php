@@ -30,12 +30,14 @@
     
     <div class="flex flex-col md:flex-row gap-6 mb-8">
         
-        <div class="w-full md:w-1/3 h-64 bg-gray-700 rounded-xl overflow-hidden shadow-lg">
-            <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>"
-                 class="w-full h-full object-cover">
-        </div>
+        <?php if($article->image): ?>
+            <div class="w-full md:w-1/3 h-64 bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>"
+                     class="w-full h-full object-cover">
+            </div>
+        <?php endif; ?>
 
-        <div class="w-full md:w-2/3">
+        <div class="w-full <?php echo e($article->image ? 'md:w-2/3' : ''); ?>">
             <h1 class="text-3xl font-bold mb-4 text-white leading-tight"><?php echo e($article->title); ?></h1>
             <div class="flex gap-2 mb-4">
                 <span class="inline-block <?php echo e($categoryColors[$article->category->slug] ?? 'bg-gray-600'); ?> text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">
@@ -64,9 +66,11 @@
             <?php $__currentLoopData = $similaires; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <a href="<?php echo e(route('article.show', $item->slug)); ?>" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
                     
-                    <img src="<?php echo e(str_starts_with($item->image, 'http') ? $item->image : asset('storage/' . $item->image)); ?>"
-                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                    
+                    <?php if($item->image): ?>
+                        <img src="<?php echo e(str_starts_with($item->image, 'http') ? $item->image : asset('storage/' . $item->image)); ?>"
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <?php endif; ?>
+
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
 
                     <div class="absolute bottom-0 left-0 w-full p-4 text-white">

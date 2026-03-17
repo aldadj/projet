@@ -129,29 +129,49 @@ class AdminController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $data = $request->only(['title', 'content', 'category_id']);
 
-        if ($request->hasFile('image')) {
-            try {
-                $result = Cloudinary::upload($request->file('image')->getRealPath(), [
-                    'folder' => 'actupress_articles'
-                ]);
-                $data['image'] = $result->getSecurePath();
-                
-                // Optionnel : Supprimer l'ancienne image sur Cloudinary ici pour ne pas encombrer ton compte
-            } catch (\Exception $e) {
-                return back()->withInput()->withErrors(['image' => 'Erreur upload : ' . $e->getMessage()]);
+        // Gère la suppression de l'image si la case est cochée
+        if ($request->has('delete_image') && $article->image) {
+            if (str_contains($article->image, 'cloudinary.com')) {
+                try {
+                    $path = parse_url($article->image, PHP_URL_PATH);
+                    $segments = explode('/', $path);
+                    $filename = end($segments);
+                    $publicId = pathinfo($filename, PATHINFO_FILENAME);
+                    Cloudinary::destroy('actupress_articles/' . $publicId);
+                } catch (\Exception $e) {
+                    // On peut logger l'erreur si besoin, mais on continue
+                }
             }
+            $data['image'] = null;
+        } 
+        // Gère le remplacement de l'image si un nouveau fichier est uploadé
+        elseif ($request->hasFile('image')) {
+            // Supprime l'ancienne image avant d'uploader la nouvelle
+            if ($article->image && str_contains($article->image, 'cloudinary.com')) {
+                try {
+                    $path = parse_url($article->image, PHP_URL_PATH);
+                    $segments = explode('/', $path);
+                    $filename = end($segments);
+                    $publicId = pathinfo($filename, PATHINFO_FILENAME);
+                    Cloudinary::destroy('actupress_articles/' . $publicId);
+                } catch (\Exception $e) {
+                    // On peut logger l'erreur si besoin
+                }
+            }
+            // Upload de la nouvelle image
+            $result = Cloudinary::upload($request->file('image')->getRealPath(), ['folder' => 'actupress_articles']);
+            $data['image'] = $result->getSecurePath();
         }
 
         $data['is_headline'] = $request->has('is_headline');
         if ($data['is_headline']) {
             Article::where('is_headline', true)->where('id', '!=', $id)->update(['is_headline' => false]);
         }
-
         if ($request->title !== $article->title) {
             $slug = Str::slug($request->title);
             $count = 1;

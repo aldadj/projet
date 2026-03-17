@@ -45,7 +45,7 @@
 
         <div>
             <label for="image" class="block text-sm font-bold mb-2 text-slate-300 uppercase tracking-wider">Image de couverture</label>
-            <input type="file" id="image" name="image" class="w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer" required>
+            <input type="file" id="image" name="image" class="w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer">
         </div>
 
         <div id="preview-container" class="hidden mt-4">

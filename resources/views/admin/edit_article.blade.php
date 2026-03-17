@@ -63,12 +63,17 @@
                     
                     @if($article->image)
                         <div class="mb-4 relative group">
-                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" alt="{{ $article->title }}">
-                                <span class="text-white text-sm font-bold">Image actuelle</span>
-                            </div>
+                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="rounded-lg shadow-md w-full">
+                            <span class="absolute top-2 left-2 bg-black/50 text-white text-xs font-bold px-2 py-1 rounded">Image actuelle</span>
                         </div>
-           @endif
-
+                        <div class="mb-4">
+                            <label class="flex items-center space-x-2 cursor-pointer group">
+                                <input type="checkbox" name="delete_image" class="h-4 w-4 rounded border-gray-500 bg-gray-900 text-red-600 focus:ring-red-500">
+                                <span class="text-sm font-medium text-red-400 group-hover:text-red-300 transition">Supprimer l'image actuelle</span>
+                            </label>
+                        </div>
+                    @endif
+ 
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-gray-500 transition-colors">
                         <div class="space-y-1 text-center">
                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">

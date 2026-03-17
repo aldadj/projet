@@ -95,7 +95,7 @@
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="text-center md:text-left">
             <span class="block text-lg font-bold text-slate-300 mb-1">ACTU<span class="text-blue-500">PRESS</span></span>
-            <p>&copy; <?php echo e(date('Y')); ?> - L'information en temps réel.</p>
+            <p>&copy; <?php echo e(date('Y')); ?> - L'information en temps - ALDADJ TECH conception.</p>
         </div>
         
         <div class="flex items-center gap-6">
