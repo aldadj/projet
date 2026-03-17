@@ -100,9 +100,11 @@
     <div class="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <?php $__currentLoopData = $articles->skip(2)->take(6); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="group bg-gray-800/70 hover:bg-gray-800 transition-colors rounded-2xl shadow-lg overflow-hidden flex flex-col border border-gray-700/50 hover:border-blue-500/50">
-                <div class="h-48 overflow-hidden">
-                    <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
+                <?php if($article->image): ?>
+                    <div class="h-48 overflow-hidden">
+                        <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                <?php endif; ?>
                 <div class="p-4 flex flex-col flex-grow">
                     <span class="inline-block <?php echo e($categoryColors[$article->category->slug] ?? 'bg-gray-600'); ?> text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-3 shadow-sm self-start">
                         <?php echo e($article->category->name); ?>
@@ -112,6 +114,15 @@
                         <?php echo e($article->title); ?>
 
                     </h3>
+                    
+                    <?php if(!$article->image): ?>
+                        <p class="text-gray-400 text-sm line-clamp-4 mb-3">
+                            <?php echo e($article->content); ?>
+
+                        </p>
+                        <span class="text-blue-400 text-xs font-bold uppercase hover:underline mt-auto">Voir plus &rarr;</span>
+                    <?php endif; ?>
+
                     <div class="flex items-center text-xs text-gray-400 font-medium mt-auto pt-2">
                         <?php echo e($article->created_at->format('d/m/Y')); ?>
 

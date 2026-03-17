@@ -63,11 +63,12 @@ class AdminController extends Controller
         'title' => 'required|max:255',
         'content' => 'required',
         'category_id' => 'required|exists:categories,id',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
     ]);
 
+    $imageUrl = null;
+
     try {
-        // CONFIGURATION MANUELLE DIRECTE
         $config = new \Cloudinary\Configuration\Configuration([
             'cloud' => [
                 'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
@@ -78,12 +79,13 @@ class AdminController extends Controller
 
         $uploadApi = new \Cloudinary\Api\Upload\UploadApi($config);
         
-        // Upload direct
-        $result = $uploadApi->upload($request->file('image')->getRealPath(), [
-            'folder' => 'actupress_articles'
-        ]);
-
-        $imageUrl = $result['secure_url']; // On récupère l'URL ici
+        // Upload direct seulement si une image est présente
+        if ($request->hasFile('image')) {
+            $result = $uploadApi->upload($request->file('image')->getRealPath(), [
+                'folder' => 'actupress_articles'
+            ]);
+            $imageUrl = $result['secure_url'];
+        }
 
     } catch (\Exception $e) {
         return back()->withInput()->withErrors(['image' => 'Erreur Cloudinary : ' . $e->getMessage()]);

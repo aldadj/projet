@@ -20,9 +20,11 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @forelse($articles as $article)
         <a href="{{ route('article.show', $article->slug) }}" class="group bg-gray-800/70 hover:bg-gray-800 transition-colors rounded-2xl shadow-lg overflow-hidden flex flex-col border border-gray-700/50 hover:border-blue-500/50">
-            <div class="h-48 overflow-hidden">
-                <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            </div>
+            @if($article->image)
+                <div class="h-48 overflow-hidden">
+                    <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                </div>
+            @endif
             <div class="p-4 flex flex-col flex-grow">
                 <span class="inline-block {{ $categoryColors[$article->category->slug] ?? 'bg-gray-600' }} text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-3 shadow-sm self-start">
                     {{ $article->category->name }}
@@ -30,6 +32,14 @@
                 <h3 class="text-md font-bold mb-2 leading-tight group-hover:text-blue-400 transition-colors line-clamp-3 flex-grow text-gray-100">
                     {{ $article->title }}
                 </h3>
+
+                @if(!$article->image)
+                    <p class="text-gray-400 text-sm line-clamp-4 mb-3">
+                        {{ $article->content }}
+                    </p>
+                    <span class="text-blue-400 text-xs font-bold uppercase hover:underline mt-auto">Voir plus &rarr;</span>
+                @endif
+
                 <div class="flex items-center text-xs text-gray-400 font-medium mt-auto pt-2">
                     {{ $article->created_at->format('d/m/Y') }}
                 </div>
