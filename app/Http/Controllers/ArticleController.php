@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -27,9 +28,14 @@ class ArticleController extends Controller
         }
 
         // Récupérer les 5 derniers articles pour le slider "À la une"
-        $headlines = Article::latest()->take(5)->get();
+        $headlines = Article::withCount('likes')
+                    ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
+                    ->latest()->take(5)->get();
+        
         // Récupérer tous les articles pour la grille
-        $articles = Article::latest()->take(999)->get();
+        $articles = Article::withCount('likes')
+                    ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
+                    ->latest()->take(999)->get();
 
         return view('welcome', compact('headlines', 'articles', 'categories'));
     }
@@ -39,7 +45,9 @@ class ArticleController extends Controller
      */
     public function show($slug)
     {
-        $article = Article::where('slug', $slug)->firstOrFail();
+        $article = Article::withCount('likes')
+                    ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
+                    ->where('slug', $slug)->firstOrFail();
 
         $similaires = Article::where('category_id', $article->category_id)
                             ->where('id', '!=', $article->id)
@@ -57,7 +65,9 @@ class ArticleController extends Controller
     public function category($slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
-        $articles = $category->articles()->latest()->paginate(6); 
+        $articles = $category->articles()->withCount('likes')
+                    ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
+                    ->latest()->paginate(6); 
         $categories = Category::all();
 
         return view('category', compact('category', 'articles', 'categories'));

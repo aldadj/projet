@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Site de Presse</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-slate-900 antialiased font-sans">
@@ -83,6 +84,63 @@
             menu.classList.toggle('-translate-y-5');
             menu.classList.toggle('pointer-events-none');
         });
+
+        // Fonction de partage
+        async function shareArticle(title, url) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: title,
+                        text: 'Regarde cet article intéressant sur ActuPress !',
+                        url: url
+                    });
+                } catch (err) {
+                    console.log('Partage annulé');
+                }
+            } else {
+                // Fallback : Copier le lien
+                navigator.clipboard.writeText(url).then(function() {
+                    alert('Lien copié dans le presse-papier !');
+                }, function(err) {
+                    console.error('Erreur lors de la copie', err);
+                });
+            }
+        }
+
+        // Fonction de Like (AJAX)
+        async function toggleLike(btn, articleId) {
+            @guest
+                window.location.href = "{{ route('login') }}";
+                return;
+            @endguest
+
+            try {
+                const response = await fetch(`/article/${articleId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                });
+
+                const data = await response.json();
+                
+                // Mise à jour de l'UI
+                const countSpan = btn.querySelector('.likes-count');
+                countSpan.innerText = data.count;
+                
+                if (data.liked) {
+                    btn.classList.add('text-red-500');
+                    btn.classList.remove('text-gray-400');
+                } else {
+                    btn.classList.remove('text-red-500');
+                    btn.classList.add('text-gray-400');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
     </script>
 
     <main class="container mx-auto px-4 min-h-screen py-6">

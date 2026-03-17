@@ -12,55 +12,56 @@
 @endphp
 
 {{-- Fil d'Ariane (Breadcrumb) --}}
-<div class="mb-6 flex items-center text-sm text-gray-400 overflow-hidden">
-    <a href="{{ route('home') }}" class="hover:text-white transition flex-shrink-0 flex items-center gap-1">
+<div class="mb-6 flex items-center text-sm text-gray-500 overflow-hidden">
+    <a href="{{ route('home') }}" class="hover:text-blue-600 transition flex-shrink-0 flex items-center gap-1 font-medium">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
         Accueil
     </a>
     <span class="mx-2 flex-shrink-0">/</span>
-    <a href="{{ route('category.show', $article->category->slug) }}" class="hover:text-white transition uppercase font-bold flex-shrink-0">
+    <a href="{{ route('category.show', $article->category->slug) }}" class="hover:text-blue-600 transition uppercase font-bold flex-shrink-0">
         {{ $article->category->name }}
     </a>
     <span class="mx-2 flex-shrink-0">/</span>
     <span class="text-gray-500 truncate">{{ $article->title }}</span>
 </div>
 
-<div class="bg-gray-800 p-8 shadow-xl rounded-2xl border border-gray-700">
+<div class="bg-white p-8 md:p-12 shadow-xl rounded-3xl border border-gray-100">
     
-    <div class="flex flex-col md:flex-row gap-6 mb-8">
+    <div class="flex flex-col md:flex-row gap-8 mb-8 items-start">
         {{-- Image de l'article avec vérification Cloudinary --}}
         @if($article->image)
-            <div class="w-full md:w-1/3 h-64 bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+            <div class="w-full md:w-1/2 h-64 md:h-80 bg-gray-100 rounded-2xl overflow-hidden shadow-lg border border-gray-200">
                 <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}"
                      class="w-full h-full object-cover">
             </div>
         @endif
 
-        <div class="w-full {{ $article->image ? 'md:w-2/3' : '' }}">
-            <h1 class="text-3xl font-bold mb-4 text-white leading-tight">{{ $article->title }}</h1>
-            <div class="flex gap-2 mb-4">
+        <div class="w-full {{ $article->image ? 'md:w-1/2' : '' }} flex flex-col justify-center">
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-6 text-gray-900 leading-tight tracking-tight">{{ $article->title }}</h1>
+            <div class="flex flex-wrap gap-3 mb-4 items-center">
                 <span class="inline-block {{ $categoryColors[$article->category->slug] ?? 'bg-gray-600' }} text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">
                     {{ $article->category->name }}
                 </span>
-                <span class="text-gray-400 text-sm italic flex items-center">
-                    <span class="mr-1">•</span> {{ $article->created_at->format('d/m/Y') }}
+                <span class="text-gray-500 text-sm font-medium flex items-center bg-gray-100 px-3 py-1 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    {{ $article->created_at->format('d/m/Y') }}
                 </span>
             </div>
         </div>
     </div>
 
-    <div class="border-t border-gray-700 pt-8 mb-12">
-        <div class="prose max-w-none text-gray-300 leading-relaxed text-lg">
+    <div class="border-t border-gray-100 pt-10 mb-12">
+        <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
             {!! nl2br(e($article->content)) !!}
         </div>
     </div>
 
     {{-- Section Articles Similaires --}}
-    <div class="border-t border-gray-700 pt-8">
-        <h3 class="font-bold mb-6 uppercase text-blue-400 tracking-wider">Articles Similaires</h3>
+    <div class="border-t border-gray-100 pt-10">
+        <h3 class="font-bold text-2xl mb-8 text-gray-900 border-l-4 border-blue-600 pl-4">Articles Similaires</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach($similaires as $item)
-                <a href="{{ route('article.show', $item->slug) }}" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-xl">
+                <a href="{{ route('article.show', $item->slug) }}" class="group relative block w-full h-64 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
                     {{-- Image des articles similaires avec vérification Cloudinary --}}
                     @if($item->image)
                         <img src="{{ str_starts_with($item->image, 'http') ? $item->image : asset('storage/' . $item->image) }}"
