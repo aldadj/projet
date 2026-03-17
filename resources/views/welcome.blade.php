@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    body { background-color: #ffffff !important; color: #e2e8f0; }
-</style>
-
 @php
     $categoryColors = [
         'sport' => 'bg-red-600',
@@ -127,29 +123,33 @@
 
     <div class="col-span-12 lg:col-span-8 grid grid-cols-2 gap-4">
         @foreach($articles->skip(2)->take(6) as $article)
-            <a href="{{ route('article.show', $article->slug) }}" class="group bg-gray-800/70 hover:bg-gray-800 transition-colors rounded-2xl shadow-lg overflow-hidden flex flex-col border border-gray-700/50 hover:border-blue-500/50">
+            <a href="{{ route('article.show', $article->slug) }}" class="group {{ $article->image ? 'bg-gray-800 hover:bg-gray-700 shadow-lg border border-gray-700' : 'bg-transparent hover:bg-slate-50 border-b border-slate-200' }} transition-all rounded-2xl overflow-hidden flex flex-col p-4">
                 @if($article->image)
-                    <div class="h-48 overflow-hidden">
+                    <div class="h-48 overflow-hidden rounded-xl mb-4">
                         <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     </div>
                 @endif
-                <div class="p-4 flex flex-col flex-grow">
+                
+                <div class="flex flex-col flex-grow">
                     <span class="inline-block {{ $categoryColors[$article->category->slug] ?? 'bg-gray-600' }} text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase mb-3 shadow-sm self-start">
                         {{ $article->category->name }}
                     </span>
-                    <h3 class="text-md font-bold mb-2 leading-tight group-hover:text-blue-400 transition-colors line-clamp-3 flex-grow text-gray-100">
+                    
+                    <h3 class="text-lg font-bold mb-2 leading-tight group-hover:text-blue-600 transition-colors line-clamp-3 flex-grow {{ $article->image ? 'text-white' : 'text-slate-900' }}">
                         {{ $article->title }}
                     </h3>
                     
                     @if(!$article->image)
-                        <p class="text-gray-400 text-sm line-clamp-4 mb-3">
+                        <p class="text-slate-600 text-sm line-clamp-3 mb-3 leading-relaxed">
                             {{ $article->content }}
                         </p>
-                        <span class="text-blue-400 text-xs font-bold uppercase hover:underline mt-auto">Voir plus &rarr;</span>
                     @endif
 
-                    <div class="flex items-center text-xs text-gray-400 font-medium mt-auto pt-2">
-                        {{ $article->created_at->format('d/m/Y') }}
+                    <div class="flex items-center justify-between mt-auto pt-2 border-t {{ $article->image ? 'border-gray-700' : 'border-slate-100' }}">
+                        <span class="text-xs font-medium {{ $article->image ? 'text-gray-400' : 'text-slate-500' }}">{{ $article->created_at->format('d/m/Y') }}</span>
+                        @if(!$article->image)
+                            <span class="text-blue-600 text-xs font-bold uppercase hover:underline">Lire l'article &rarr;</span>
+                        @endif
                     </div>
                 </div>
             </a>

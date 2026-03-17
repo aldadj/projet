@@ -11,10 +11,10 @@
     ];
 @endphp
 <div class="mb-8">
-    <h1 class="text-2xl font-bold text-white">
-        Résultats pour : <span class="text-blue-400">"{{ $search }}"</span>
+    <h1 class="text-2xl font-bold text-slate-900">
+        Résultats pour : <span class="text-blue-600">"{{ $search }}"</span>
     </h1>
-    <p class="text-gray-400">{{ $articles->count() }} article(s) trouvé(s)</p>
+    <p class="text-slate-600">{{ $articles->count() }} article(s) trouvé(s)</p>
 </div>
 
 <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">

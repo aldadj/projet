@@ -28,8 +28,8 @@ class ArticleController extends Controller
 
         // Récupérer les 5 derniers articles pour le slider "À la une"
         $headlines = Article::latest()->take(5)->get();
-        // Récupérer le reste des articles pour la grille (en sautant les 5 premiers)
-        $articles = Article::latest()->skip(5)->take(999)->get();
+        // Récupérer tous les articles pour la grille
+        $articles = Article::latest()->take(999)->get();
 
         return view('welcome', compact('headlines', 'articles', 'categories'));
     }

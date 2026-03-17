@@ -6,7 +6,7 @@
     <title>Mon Site de Presse</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 text-slate-200 antialiased font-sans">
+<body class="bg-white text-slate-900 antialiased font-sans">
     <nav class="bg-slate-800/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-700 shadow-lg mb-8">
         <div class="container mx-auto px-4 h-20 flex items-center justify-between">
             

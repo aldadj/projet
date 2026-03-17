@@ -13,12 +13,12 @@
 
 <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
     <div>
-        <h1 class="text-3xl font-bold text-white uppercase border-b-4 border-blue-500 inline-block pb-2">
+        <h1 class="text-3xl font-bold text-slate-900 uppercase border-b-4 border-blue-500 inline-block pb-2">
             {{ $category->name }}
         </h1>
-        <p class="text-gray-400 mt-2">Les derniers articles de la section {{ $category->name }}.</p>
+        <p class="text-slate-600 mt-2">Les derniers articles de la section {{ $category->name }}.</p>
     </div>
-    <a href="{{ route('home') }}" class="text-gray-400 hover:text-white transition inline-flex items-center gap-2">
+    <a href="{{ route('home') }}" class="text-slate-500 hover:text-slate-900 transition inline-flex items-center gap-2">
         &larr; Retour à l'accueil
     </a>
 </div>
