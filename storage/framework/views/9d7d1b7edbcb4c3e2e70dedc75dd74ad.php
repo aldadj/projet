@@ -1,72 +1,103 @@
 
 
 <?php $__env->startSection('content'); ?>
-<div class="max-w-4xl mx-auto">
+<div class="max-w-5xl mx-auto px-4 py-8">
     
-    <div class="flex justify-between items-center mb-8">
-        <div class="flex items-center gap-4">
-            <a href="<?php echo e(route('admin.dashboard')); ?>" class="p-2 bg-slate-800 rounded-full text-slate-400 hover:text-white hover:bg-slate-700 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" /></svg>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+        <div class="flex items-center gap-6">
+            <a href="<?php echo e(route('admin.dashboard')); ?>" class="group flex items-center justify-center w-12 h-12 bg-white border-2 border-slate-200 rounded-full text-slate-600 hover:border-[#bb1919] hover:text-[#bb1919] transition-all shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
             </a>
-            <h1 class="text-2xl font-bold text-white tracking-tight">Lecture du message</h1>
+            <div>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase italic">Boîte de réception</h1>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Gestion des contacts lecteurs</p>
+            </div>
         </div>
-        <div class="flex gap-3">
-            <a href="mailto:<?php echo e($message->email); ?>?subject=Re: <?php echo e($message->subject); ?>" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-lg shadow-blue-900/20">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+
+        <div class="flex gap-4 w-full md:w-auto">
+            <a href="mailto:<?php echo e($message->email); ?>?subject=Re: <?php echo e($message->subject); ?>" class="flex-1 md:flex-none flex items-center justify-center gap-3 bg-[#212121] hover:bg-[#bb1919] text-white px-6 py-3 font-black text-xs uppercase tracking-widest transition-all shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                </svg>
                 Répondre
             </a>
-            <form action="<?php echo e(route('admin.message.delete', $message->id)); ?>" method="POST" onsubmit="return confirm('Supprimer ce message définitivement ?');">
+            <form action="<?php echo e(route('admin.message.delete', $message->id)); ?>" method="POST" onsubmit="return confirm('Supprimer définitivement ?');" class="flex-1 md:flex-none">
                 <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                <button type="submit" class="flex items-center gap-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-2 rounded-lg font-bold text-sm transition border border-red-500/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                <button type="submit" class="w-full flex items-center justify-center gap-3 bg-white hover:bg-red-50 text-red-600 px-6 py-3 font-black text-xs uppercase tracking-widest transition-all border-2 border-red-600 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
                     Supprimer
                 </button>
             </form>
         </div>
     </div>
 
-    <div class="bg-slate-800 rounded-2xl shadow-xl border border-slate-700 overflow-hidden">
+    <div class="bg-white border-t-4 border-[#bb1919] shadow-2xl overflow-hidden">
         
-        <div class="p-8 border-b border-slate-700 bg-slate-900/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div>
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                        <?php echo e(substr($message->name, 0, 1)); ?>
+        <div class="p-8 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start gap-8">
+            <div class="flex items-start gap-5">
+                <div class="h-16 w-16 bg-[#212121] flex items-center justify-center text-[#bb1919] font-black text-2xl border-b-4 border-[#bb1919]">
+                    <?php echo e(substr($message->name, 0, 1)); ?>
 
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white leading-none"><?php echo e($message->name); ?></h2>
-                        <a href="mailto:<?php echo e($message->email); ?>" class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
+                </div>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900 leading-none uppercase tracking-tighter"><?php echo e($message->name); ?></h2>
+                    <div class="mt-2 flex flex-col gap-1">
+                        <a href="mailto:<?php echo e($message->email); ?>" class="text-[#bb1919] hover:underline text-sm font-bold tracking-tight italic">
                             <?php echo e($message->email); ?>
 
                         </a>
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Reçu le <?php echo e($message->created_at->format('d/m/Y')); ?> à <?php echo e($message->created_at->format('H:i')); ?>
+
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center gap-2 text-slate-400 text-sm bg-slate-700/30 px-4 py-2 rounded-full border border-slate-700/50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>
-                <?php echo e($message->created_at->format('d M Y à H:i')); ?>
-
+            
+            
+            <div class="bg-green-100 text-green-700 px-4 py-1 text-[10px] font-black uppercase tracking-[0.2em] self-start md:self-center">
+                Message Lu
             </div>
         </div>
         
         
-        <div class="p-8 md:p-10">
-            <div class="mb-8">
-                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Objet du message</span>
-                <h3 class="text-xl md:text-2xl font-bold text-white leading-tight">
+        <div class="p-8 md:p-12">
+            <div class="mb-10">
+                <span class="text-[10px] font-black text-[#bb1919] uppercase tracking-[0.3em] block mb-3">Sujet de la correspondance —</span>
+                <h3 class="text-3xl md:text-4xl font-black text-slate-900 leading-[0.9] uppercase tracking-tighter italic">
                     <?php echo e($message->subject); ?>
 
                 </h3>
             </div>
             
-            <div class="prose prose-invert max-w-none text-slate-300 leading-relaxed bg-slate-900/50 p-6 rounded-xl border border-slate-700/50 shadow-inner">
-                <?php echo nl2br(e($message->message)); ?>
+            <div class="relative">
+                
+                <div class="absolute -top-6 -left-4 text-slate-100 text-8xl font-black select-none z-0">“</div>
+                
+                <div class="relative z-10 text-slate-700 text-lg leading-relaxed font-medium bg-white p-2">
+                    <?php echo nl2br(e($message->message)); ?>
 
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="px-8 py-6 bg-slate-900 flex justify-between items-center">
+            <span class="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Fin du message</span>
+            <div class="flex gap-2">
+                <div class="w-2 h-2 bg-[#bb1919]"></div>
+                <div class="w-2 h-2 bg-white"></div>
+                <div class="w-2 h-2 bg-slate-700"></div>
             </div>
         </div>
     </div>
 </div>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\alisn\Desktop\LARAVEL\projet\resources\views/admin/show_message.blade.php ENDPATH**/ ?>

@@ -60,7 +60,7 @@
                 
                 <div class="prose prose-xl prose-slate max-w-none">
                     <div class="text-[#333] leading-[1.6] font-serif text-2xl space-y-8 first-letter:text-7xl first-letter:font-black first-letter:text-[#bb1919] first-letter:mr-3 first-letter:float-left">
-                        <?php echo nl2br(e($qsn->value ?? 'Notre histoire commence par une volonté de transparence... Nous construisons actuellement cet espace pour vous.')); ?>
+                        <?php echo nl2br(e(optional($qsn ?? null)->value ?? 'Notre histoire commence par une volonté de transparence... Nous construisons actuellement cet espace pour vous.')); ?>
 
                     </div>
                 </div>
