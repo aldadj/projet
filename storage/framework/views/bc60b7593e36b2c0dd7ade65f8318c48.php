@@ -11,7 +11,7 @@
         body { font-family: 'Inter', sans-serif; background-color: #f6f6f6; }
     </style>
 </head>
-<body class="bg-[#f6f6f6] text-[#212121] antialiased">
+<body class="bg-[#f6f6f6] text-[#212121] antialiased overflow-x-hidden">
 
     
     <header class="bg-white border-b border-gray-200">

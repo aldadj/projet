@@ -6,8 +6,8 @@
     <title>Connexion - ActuPress</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 h-screen flex items-center justify-center p-4">
-    <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700">
+<body class="bg-slate-900 min-h-screen flex items-center justify-center p-4 overflow-x-hidden">
+    <div class="bg-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700">
         <div class="text-center mb-8">
             <div class="text-4xl mb-2">📰</div>
             <h1 class="text-2xl font-bold text-white tracking-tight">ACTU<span class="text-blue-500">PRESS</span></h1>
@@ -35,7 +35,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
                     </div>
-                    <input type="email" name="email" class="w-full bg-slate-900 border border-slate-600 text-white pl-10 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition placeholder-slate-600" placeholder="admin@exple.com" value="{{ old('email') }}" required>
+                    <input type="email" name="email" class="w-full bg-slate-900 border border-slate-600 text-white text-base pl-10 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition placeholder-slate-600" placeholder="admin@exple.com" value="{{ old('email') }}" required>
                 </div>
             </div>
             <div>
@@ -44,7 +44,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
                     </div>
-                    <input type="password" name="password" class="w-full bg-slate-900 border border-slate-600 text-white pl-10 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition placeholder-slate-600" placeholder="••••••••" required>
+                    <input type="password" name="password" class="w-full bg-slate-900 border border-slate-600 text-white text-base pl-10 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition placeholder-slate-600" placeholder="••••••••" required>
                 </div>
             </div>
             <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-500 transition-all transform hover:scale-[1.02] shadow-lg uppercase tracking-wider flex justify-center items-center gap-2">

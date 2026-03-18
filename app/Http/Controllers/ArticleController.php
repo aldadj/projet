@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -78,5 +79,13 @@ class ArticleController extends Controller
 
         $categories = Category::all();
         return view('category', compact('category', 'articles', 'categories'));
+    }
+
+    public function qsn()
+    {
+        $qsn = Setting::where('key', 'qsn_content')->first();
+        $categories = Category::all();
+        
+        return view('qsn', compact('qsn', 'categories'));
     }
 }
