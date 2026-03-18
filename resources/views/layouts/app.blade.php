@@ -39,7 +39,7 @@
                 @endguest
 
                 @auth
-                    <div class="flex items-center gap-3 border-l pl-4 border-gray-300">
+                    <div class="hidden md:flex items-center gap-3 border-l pl-4 border-gray-300">
                         @if(auth()->user()->email === 'admin@exple.com')
                             <a href="{{ route('admin.dashboard') }}" class="text-xs font-black uppercase tracking-tighter text-[#bb1919] hover:underline">Dashboard</a>
                         @endif
@@ -91,6 +91,13 @@
             @if(auth()->check() && auth()->user()->email === 'admin@exple.com')
                 <a href="{{ route('admin.dashboard') }}" class="text-[#bb1919]">Dashboard Admin</a>
             @endif
+            @auth
+                <a href="{{ route('profile.show') }}">Mon Compte</a>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="text-[#bb1919]">Se déconnecter</button>
+                </form>
+            @endauth
             <hr class="border-white/10">
             <a href="{{ route('qsn') }}" class="text-gray-400">À propos</a>
             <a href="{{ route('contact') }}" class="text-gray-400">Contact</a>

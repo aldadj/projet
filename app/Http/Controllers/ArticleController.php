@@ -74,7 +74,7 @@ class ArticleController extends Controller
                 $q->where('user_id', Auth::id()); 
             }])
             ->latest()
-            ->get(); // On récupère tout sans pagination
+            ->paginate(12);
 
         $categories = Category::all();
         return view('category', compact('category', 'articles', 'categories'));

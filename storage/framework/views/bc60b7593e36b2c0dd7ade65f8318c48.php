@@ -39,7 +39,7 @@
                 <?php endif; ?>
 
                 <?php if(auth()->guard()->check()): ?>
-                    <div class="flex items-center gap-3 border-l pl-4 border-gray-300">
+                    <div class="hidden md:flex items-center gap-3 border-l pl-4 border-gray-300">
                         <?php if(auth()->user()->email === 'admin@exple.com'): ?>
                             <a href="<?php echo e(route('admin.dashboard')); ?>" class="text-xs font-black uppercase tracking-tighter text-[#bb1919] hover:underline">Dashboard</a>
                         <?php endif; ?>
@@ -91,6 +91,13 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             <?php if(auth()->check() && auth()->user()->email === 'admin@exple.com'): ?>
                 <a href="<?php echo e(route('admin.dashboard')); ?>" class="text-[#bb1919]">Dashboard Admin</a>
+            <?php endif; ?>
+            <?php if(auth()->guard()->check()): ?>
+                <a href="<?php echo e(route('profile.show')); ?>">Mon Compte</a>
+                <form action="<?php echo e(route('logout')); ?>" method="POST">
+                    <?php echo csrf_field(); ?>
+                    <button type="submit" class="text-[#bb1919]">Se déconnecter</button>
+                </form>
             <?php endif; ?>
             <hr class="border-white/10">
             <a href="<?php echo e(route('qsn')); ?>" class="text-gray-400">À propos</a>
