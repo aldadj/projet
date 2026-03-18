@@ -16,12 +16,17 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+        // On récupère les chiffres pour les cartes
         $count_articles = Article::count();
         $unread_messages = Contact::where('is_read', false)->count();
+        
+        // On récupère les listes pour les tables
         $messages = Contact::latest()->take(5)->get();
-        $categories = Category::all();
         $articles = Article::latest()->get();
 
+        // On récupère les catégories pour le menu (si utilisé dans layouts.app)
+        $categories = Category::all();
+        
         return view('admin.dashboard', compact('count_articles', 'unread_messages', 'messages', 'categories', 'articles'));
     }
 
@@ -30,14 +35,14 @@ class AdminController extends Controller
         $message = Contact::findOrFail($id);
         $message->is_read = true;
         $message->save();
-        $categories = Category::all();
         
+        $categories = Category::all();
         return view('admin.show_message', compact('message', 'categories'));
     }
 
     public function editQsn()
     {
-        $qsn = Setting::where('key', 'qsn_content')->first();
+        $qsn = Setting::where('key', 'qsn_content')->firstOrFail();
         $categories = Category::all();
         
         return view('admin.edit_qsn', compact('qsn', 'categories'));
@@ -212,5 +217,12 @@ class AdminController extends Controller
     
         $article->delete();
         return back()->with('success', 'Article supprimé avec succès.');
+    }
+
+    public function deleteMessage($id)
+    {
+        $message = Contact::findOrFail($id);
+        $message->delete();
+        return back()->with('success', 'Message supprimé avec succès.');
     }
 }

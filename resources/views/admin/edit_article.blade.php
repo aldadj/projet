@@ -1,96 +1,139 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-white">Modifier l'Article</h1>
-        <a href="{{ route('admin.dashboard') }}" class="text-gray-400 hover:text-white transition">
-            &larr; Retour au tableau de bord
+<div class="max-w-7xl mx-auto px-4 py-8">
+    
+    {{-- Barre de titre administrative --}}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4 border-b-4 border-[#212121] pb-6">
+        <div>
+            <div class="flex items-center gap-2 mb-2">
+                <span class="bg-[#bb1919] text-white text-[10px] font-black px-2 py-0.5 uppercase tracking-widest">Admin Mode</span>
+                <span class="text-gray-400 text-[10px] font-black uppercase tracking-widest">ID: #{{ $article->id }}</span>
+            </div>
+            <h1 class="text-4xl font-black text-[#212121] uppercase tracking-tighter">Modifier <span class="text-[#bb1919]">l'Article</span></h1>
+        </div>
+        <a href="{{ route('admin.dashboard') }}" class="group flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-500 hover:text-[#212121] transition-colors">
+            <span class="transform group-hover:-translate-x-1 transition-transform">←</span> Retour Dashboard
         </a>
     </div>
 
     <form action="{{ route('admin.article.update', $article->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Colonne principale -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
-                    <label class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wider">Titre de l'article</label>
-                    <input type="text" name="title" class="w-full bg-gray-900 border border-gray-700 text-white p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-lg font-semibold placeholder-gray-600" value="{{ old('title', $article->title) }}" required>
-                </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            
+            {{-- ZONE D'ÉDITION PRINCIPALE (8/12) --}}
+            <div class="lg:col-span-8 space-y-8">
+                <div class="bg-white border border-gray-200 shadow-sm p-8">
+                    {{-- Titre --}}
+                    <div class="mb-8">
+                        <label class="block text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Titre de la publication</label>
+                        <input type="text" name="title" 
+                               class="w-full bg-[#f9f9f9] border-l-4 border-[#bb1919] p-4 text-2xl font-bold text-[#212121] focus:outline-none focus:bg-white transition-all" 
+                               value="{{ old('title', $article->title) }}" required placeholder="Saisir le titre...">
+                    </div>
 
-                <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
-                    <label class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wider">Contenu</label>
-                    <textarea name="content" rows="15" class="w-full bg-gray-900 border border-gray-700 text-white p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition placeholder-gray-600">{{ old('content', $article->content) }}</textarea>
+                    {{-- Éditeur de contenu --}}
+                    <div>
+                        <label class="block text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Corps de l'article</label>
+                        <div class="relative">
+                            <textarea name="content" rows="25" 
+                                      class="w-full bg-[#f9f9f9] border border-gray-100 p-6 text-lg font-serif leading-relaxed text-[#333] focus:outline-none focus:bg-white focus:border-gray-300 transition-all resize-none shadow-inner"
+                                      placeholder="Rédigez votre contenu ici...">{{ old('content', $article->content) }}</textarea>
+                            <div class="absolute bottom-4 right-4 text-[10px] font-black text-gray-300 uppercase tracking-widest">Formatage Simple (HTML autorisé)</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Colonne latérale -->
-            <div class="space-y-6">
-                <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
-                    <h3 class="font-bold text-white text-lg mb-4 border-b border-gray-700 pb-2">Mise à jour</h3>
+            {{-- PANNEAU DE CONFIGURATION LATÉRAL (4/12) --}}
+            <div class="lg:col-span-4 space-y-6">
+                
+                {{-- Bloc Publication --}}
+                <div class="bg-[#212121] p-6 text-white shadow-lg">
+                    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-[#bb1919] mb-6 flex items-center gap-2">
+                        <span class="w-4 h-4 rounded-full border-2 border-[#bb1919] flex items-center justify-center">
+                            <span class="w-1.5 h-1.5 bg-[#bb1919] rounded-full"></span>
+                        </span>
+                        Statut & Publication
+                    </h3>
                     
-                    <div class="mb-4">
-                        <label class="block text-sm font-bold mb-2 text-gray-400">Catégorie</label>
-                        <select name="category_id" class="w-full bg-gray-900 border border-gray-700 text-white p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                            @foreach($categories as $cat)
-                                <option value="{{ $cat->id }}" {{ $article->category_id == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">Catégorie</label>
+                            <select name="category_id" class="w-full bg-[#333] border-none text-white p-3 text-sm font-bold focus:ring-2 focus:ring-[#bb1919] outline-none transition cursor-pointer">
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->id }}" {{ $article->category_id == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <div class="mb-6">
-                         <label class="flex items-center space-x-3 cursor-pointer group">
-                            <div class="relative">
-                                <input type="checkbox" name="is_headline" class="peer sr-only" {{ $article->is_headline ? 'checked' : '' }}>
-                                <div class="w-10 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                            </div>
-                            <span class="text-sm font-medium text-gray-300 group-hover:text-white transition">Mettre à la une</span>
+                        <label class="flex items-center gap-3 p-3 bg-[#333] cursor-pointer hover:bg-[#444] transition-colors group">
+                            <input type="checkbox" name="is_headline" class="w-5 h-5 accent-[#bb1919]" {{ $article->is_headline ? 'checked' : '' }}>
+                            <span class="text-xs font-black uppercase tracking-tighter text-gray-300 group-hover:text-white">Mettre à la une (Headline)</span>
                         </label>
-                    </div>
 
-                    <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                        <span>Enregistrer les modifications</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
+                        <div class="pt-4">
+                            <button type="submit" class="w-full bg-[#bb1919] hover:bg-white hover:text-[#212121] text-white font-black py-4 uppercase text-xs tracking-[0.2em] transition-all transform active:scale-95 shadow-xl">
+                                Enregistrer les modifications
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
-                    <label class="block text-sm font-bold mb-2 text-gray-300 uppercase tracking-wider">Image de couverture</label>
+                {{-- Bloc Média --}}
+                <div class="bg-white border border-gray-200 p-6 shadow-sm">
+                    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-6">Média de couverture</h3>
                     
                     @if($article->image)
-                        <div class="mb-4 relative group">
-                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="rounded-lg shadow-md w-full">
-                            <span class="absolute top-2 left-2 bg-black/50 text-white text-xs font-bold px-2 py-1 rounded">Image actuelle</span>
-                        </div>
-                        <div class="mb-4">
-                            <label class="flex items-center space-x-2 cursor-pointer group">
-                                <input type="checkbox" name="delete_image" class="h-4 w-4 rounded border-gray-500 bg-gray-900 text-red-600 focus:ring-red-500">
-                                <span class="text-sm font-medium text-red-400 group-hover:text-red-300 transition">Supprimer l'image actuelle</span>
-                            </label>
-                        </div>
-                    @endif
- 
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-gray-500 transition-colors">
-                        <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="flex text-sm text-gray-400 justify-center">
-                                <label for="file-upload" class="relative cursor-pointer bg-gray-800 rounded-md font-medium text-blue-400 hover:text-blue-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 focus-within:ring-offset-gray-800">
-                                    <span>Changer l'image</span>
-                                    <input id="file-upload" name="image" type="file" class="sr-only">
+                        <div class="mb-6 group relative">
+                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" 
+                                 class="w-full h-48 object-cover border border-gray-100 grayscale hover:grayscale-0 transition-all duration-500">
+                            <div class="mt-3">
+                                <label class="flex items-center gap-2 text-red-600 cursor-pointer hover:bg-red-50 p-2 transition">
+                                    <input type="checkbox" name="delete_image" class="accent-red-600">
+                                    <span class="text-[10px] font-black uppercase tracking-tighter">Supprimer définitivement</span>
                                 </label>
                             </div>
-                            <p class="text-xs text-gray-500">Laisser vide pour conserver l'actuelle</p>
                         </div>
+                    @endif
+
+                    <div class="relative">
+                        <input type="file" name="image" id="file-upload" class="hidden" onchange="updateFileName(this)">
+                        <label for="file-upload" class="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed border-gray-200 bg-gray-50 hover:bg-white hover:border-[#bb1919] transition-all cursor-pointer group">
+                            <svg class="w-6 h-6 mb-2 text-gray-400 group-hover:text-[#bb1919] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-width="2"/></svg>
+                            <span id="file-label" class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-[#212121]">Remplacer l'image</span>
+                        </label>
                     </div>
+                </div>
+
+                {{-- Bloc Info --}}
+                <div class="p-6 bg-[#f9f9f9] border border-gray-100">
+                    <p class="text-[10px] font-bold text-gray-400 leading-relaxed uppercase">
+                        Dernière modification : <br>
+                        <span class="text-[#212121]">{{ $article->updated_at->format('d/m/Y à H:i') }}</span>
+                    </p>
                 </div>
             </div>
         </div>
     </form>
 </div>
+
+<script>
+    function updateFileName(input) {
+        const label = document.getElementById('file-label');
+        if (input.files && input.files.length > 0) {
+            label.innerText = input.files[0].name;
+            label.classList.add('text-[#bb1919]');
+        }
+    }
+</script>
+
+<style>
+    /* Typographie Serif pour le confort d'écriture */
+    textarea {
+        font-family: 'Georgia', serif;
+    }
+</style>
 @endsection

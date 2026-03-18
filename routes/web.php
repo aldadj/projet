@@ -7,7 +7,9 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\QsnController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite; // Nécessaire si on met la logique dans le controller ou closure
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +24,8 @@ Route::get('/categorie/{slug}', [ArticleController::class, 'category'])->name('c
 // Page Contact
 Route::get('/contact', [ContactController::class, 'view_contact'])->name('contact');
 
-Route::post('/contact', [ContactController::class, 'store_contact'])->name('contact.store');
+// L'envoi de message nécessite d'être connecté
+Route::post('/contact', [ContactController::class, 'store_contact'])->name('contact.store')->middleware('auth');
 
 // Page Qui Sommes-Nous
 Route::get('/qui-sommes-nous', [QsnController::class, 'view_qsn'])->name('qsn');
@@ -34,11 +37,23 @@ Route::get('/qui-sommes-nous', [QsnController::class, 'view_qsn'])->name('qsn');
 */
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.post'); // Ajout du nom ici
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Inscription
+Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [LoginController::class, 'register'])->name('register.post');
+
+// Google Auth
+Route::get('/auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 // Likes (Nécessite d'être connecté)
 Route::post('/article/{id}/like', [LikeController::class, 'toggle'])->name('article.like')->middleware('auth');
+
+// Profil Utilisateur (Nécessite d'être connecté)
+Route::get('/compte', [ProfileController::class, 'show'])->name('profile.show')->middleware('auth');
+Route::put('/compte', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -62,4 +77,5 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     
     // Messages
     Route::get('/message/{id}', [AdminController::class, 'showMessage'])->name('message.show');
+    Route::delete('/message/{id}', [AdminController::class, 'deleteMessage'])->name('message.delete');
 });

@@ -1,163 +1,127 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto space-y-8">
-    {{-- En-tête --}}
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="max-w-7xl mx-auto px-6 py-12">
+    
+    {{-- Header --}}
+    <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b-8 border-[#212121] pb-8 gap-6">
         <div>
-            <h1 class="text-3xl font-bold text-white">Tableau de Bord</h1>
-            <p class="text-gray-400">Gérez vos articles et consultez vos messages.</p>
+            <div class="flex items-center gap-2 mb-2">
+                <span class="w-3 h-3 bg-[#bb1919] animate-pulse"></span>
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-[#bb1919]">Système de Gestion en Direct</span>
+            </div>
+            <h1 class="text-6xl font-black text-[#212121] uppercase tracking-tighter leading-none">Tableau de <span class="text-transparent" style="-webkit-text-stroke: 1.5px #212121;">Bord</span></h1>
+            <p class="text-gray-500 font-bold text-sm uppercase mt-4 tracking-widest">Contrôle éditorial : ActuPress Bureau</p>
         </div>
-        <a href="{{ route('admin.article.create') }}" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl shadow-lg shadow-blue-600/20 transition-all hover:scale-105 font-bold">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-            </svg>
-            Nouvel Article
+        
+        <a href="{{ route('admin.article.create') }}" class="bg-[#212121] text-white font-black py-5 px-10 uppercase text-xs tracking-[0.2em] hover:bg-[#bb1919] transition-all shadow-2xl">
+            ⊕ Publier un Article
         </a>
     </div>
 
-    {{-- Stats Cards --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 flex items-center justify-between group hover:border-blue-500 transition-colors">
-            <div>
-                <p class="text-gray-400 text-sm font-medium uppercase tracking-wider mb-1">Total Articles</p>
-                <p class="text-4xl font-bold text-white">{{ $count_articles }}</p>
-            </div>
-            <div class="h-12 w-12 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                </svg>
+    {{-- LES 3 CARTES (Le bloc que tu veux retrouver) --}}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0 mb-16 border border-gray-200 shadow-sm">
+        
+        {{-- Carte 1 : Articles --}}
+        <div class="bg-white p-10 border-b md:border-b-0 md:border-r border-gray-200 group">
+            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4 group-hover:text-[#bb1919] transition-colors">Total Publications</p>
+            <div class="flex items-baseline gap-2">
+                <p class="text-6xl font-black text-[#212121] tracking-tighter">{{ $count_articles ?? 0 }}</p>
+                <span class="text-xs font-bold text-gray-400">Articles</span>
             </div>
         </div>
 
-        <div class="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 flex items-center justify-between group hover:border-green-500 transition-colors">
-            <div>
-                <p class="text-gray-400 text-sm font-medium uppercase tracking-wider mb-1">Messages Non Lus</p>
-                <p class="text-4xl font-bold text-white">{{ $unread_messages }}</p>
-            </div>
-            <div class="h-12 w-12 bg-green-500/10 rounded-full flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+        {{-- Carte 2 : Messages --}}
+        <div class="bg-[#f8f8f8] p-10 border-b md:border-b-0 md:border-r border-gray-200 group">
+            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4 group-hover:text-blue-600 transition-colors">Boîte de Réception</p>
+            <div class="flex items-baseline gap-4">
+                <p class="text-6xl font-black text-[#212121] tracking-tighter">{{ $unread_messages ?? 0 }}</p>
+                <span class="bg-blue-600 text-white text-[10px] px-2 py-1 font-black uppercase tracking-tighter">Non lus</span>
             </div>
         </div>
 
-        <div class="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700 flex flex-col justify-between group hover:border-purple-500 transition-colors relative overflow-hidden">
+        {{-- Carte 3 : BOUTON QSN --}}
+        <div class="bg-[#212121] p-10 group relative overflow-hidden min-h-[180px] flex flex-col justify-center">
             <div class="relative z-10">
-                <p class="text-gray-400 text-sm font-medium uppercase tracking-wider mb-2">Configuration</p>
-                <a href="{{ route('admin.qsn.edit') }}" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-bold transition-colors">
-                    Modifier la page QSN
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                    </svg>
+                <p class="text-[10px] font-black uppercase tracking-widest text-[#bb1919] mb-4">Configuration Site</p>
+                <h3 class="text-white font-black text-xl uppercase tracking-tighter mb-6 leading-tight">Gérer la page<br>Qui Sommes-Nous</h3>
+                <a href="{{ route('admin.qsn.edit') }}" class="inline-block text-[10px] font-black uppercase tracking-widest text-white border-b-2 border-[#bb1919] pb-1 hover:text-[#bb1919] transition-all">
+                    Accéder aux réglages →
                 </a>
             </div>
-            <div class="absolute -bottom-4 -right-4 text-gray-700/20 group-hover:text-purple-500/10 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+            {{-- Décoration icône GEAR --}}
+            <span class="absolute -right-4 -bottom-4 text-white opacity-5 text-8xl font-black italic select-none">GEAR</span>
+        </div>
+    </div>
+
+    {{-- Reste du Dashboard (Articles & Messages) --}}
+    <div class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <h2 class="text-2xl font-black uppercase tracking-tighter text-[#212121]">Archives des Articles</h2>
+            <div class="h-1 flex-grow bg-gray-100"></div>
+        </div>
+        <div class="bg-white border border-gray-200 p-2">
+             @include('components.article_list', ['articles' => $articles])
+        </div>
+    </div>
+    
+    <div class="border-t-4 border-[#212121] pt-12">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-black uppercase tracking-tighter text-[#212121]">Correspondance Lecteurs</h2>
+        </div>
+
+        <div class="bg-white border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-[#212121] text-white text-[10px] uppercase font-black tracking-widest">
+                            <th class="px-8 py-5">Source</th>
+                            <th class="px-8 py-5">Sujet</th>
+                            <th class="px-8 py-5 text-center">Date</th>
+                            <th class="px-8 py-5 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($messages as $message)
+                            <tr class="hover:bg-gray-50 transition-colors group">
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-3">
+                                        {{-- Le petit point sur les messages non lus --}}
+                                        @if(!$message->is_read)
+                                            <span class="relative flex h-2 w-2">
+                                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#bb1919] opacity-75"></span>
+                                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#bb1919]"></span>
+                                            </span>
+                                        @else
+                                            {{-- Point gris discret pour les messages lus, ou laisser vide --}}
+                                            <span class="h-2 w-2 rounded-full bg-gray-200"></span>
+                                        @endif
+                                        
+                                        <span class="text-sm font-black text-[#212121] uppercase tracking-tighter {{ !$message->is_read ? 'text-[#bb1919]' : '' }}">
+                                            {{ $message->name }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6 text-sm {{ !$message->is_read ? 'font-black text-[#212121]' : 'font-bold text-gray-500' }} italic">
+                                    "{{ Str::limit($message->subject, 50) }}"
+                                </td>
+                                <td class="px-8 py-6 text-center text-[10px] font-black text-gray-400">
+                                    {{ $message->created_at->format('d/m/Y') }}
+                                </td>
+                                <td class="px-8 py-6 text-right">
+                                    <div class="flex justify-end gap-2">
+                                        <a href="{{ route('admin.message.show', $message->id) }}" class="bg-gray-100 text-[#212121] text-[10px] font-black py-2 px-4 uppercase tracking-widest hover:bg-[#212121] hover:text-white transition-all shadow-sm">
+                                            Ouvrir
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="4" class="py-10 text-center text-gray-400 uppercase text-[10px] font-black">Aucun message</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-        </div>
-    </div>
-
-    {{-- Liste des articles --}}
-    <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
-        <div class="p-6 border-b border-gray-700">
-            <h2 class="text-xl font-bold text-white">Gestion des Articles</h2>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
-            @forelse($articles as $article)
-                <div class="group bg-gray-900 rounded-xl border border-gray-700 overflow-hidden hover:border-gray-500 transition-all shadow-lg hover:shadow-2xl flex flex-col">
-                    <div class="h-40 overflow-hidden relative">
-                         @if($article->image)
-                            <img src="{{ str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                       @else
-                           <div class="w-full h-full bg-gray-800 flex items-center justify-center text-gray-600 font-bold">Sans Image</div>
-                         @endif
-                         
-                         @if($article->is_headline)
-                            <span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase shadow-sm">À la une</span>
-                         @endif
-                    </div>
-
-                    <div class="p-4 flex-1 flex flex-col">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-blue-400 text-xs font-bold uppercase tracking-wide">{{ $article->category->name }}</span>
-                            <span class="text-xs text-gray-500">{{ $article->created_at->format('d/m/Y') }}</span>
-                        </div>
-                        <h3 class="font-bold text-white mb-4 line-clamp-2 flex-1">{{ $article->title }}</h3>
-                        
-                        <div class="flex items-center gap-2 mt-auto pt-4 border-t border-gray-800">
-                            <a href="{{ route('admin.article.edit', $article->id) }}" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white text-center py-2 rounded-lg text-sm font-bold transition-colors">Modifier</a>
-                            
-                            <form action="{{ route('admin.article.delete', $article->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white p-2 rounded-lg transition-colors" title="Supprimer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <div class="col-span-full py-12 text-center">
-                    <div class="inline-block p-4 rounded-full bg-gray-700 text-gray-500 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </div>
-                    <p class="text-gray-400 text-lg">Aucun article publié pour le moment.</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
-
-    {{-- Derniers Messages --}}
-    <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
-        <div class="p-6 border-b border-gray-700">
-            <h2 class="text-xl font-bold text-white">Derniers Messages Reçus</h2>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-gray-300">
-                <thead class="bg-gray-900/50 text-gray-400 uppercase text-xs font-bold tracking-wider">
-                    <tr>
-                        <th class="p-4">Nom</th>
-                        <th class="p-4">Sujet</th>
-                        <th class="p-4">Date</th>
-                        <th class="p-4 text-right">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-700">
-                    @forelse($messages as $msg)
-                    <tr class="hover:bg-gray-700/50 transition-colors {{ !$msg->is_read ? 'bg-gray-700/30' : '' }}">
-                        <td class="p-4 font-medium">
-                            <div class="flex items-center gap-3">
-                                @if(!$msg->is_read)
-                                    <span class="h-2 w-2 rounded-full bg-blue-500 flex-shrink-0" title="Non lu"></span>
-                                @else
-                                    <span class="h-2 w-2 rounded-full bg-transparent flex-shrink-0"></span>
-                                @endif
-                                <span class="{{ !$msg->is_read ? 'text-white font-semibold' : 'text-gray-400' }}">{{ $msg->name }}</span>
-                            </div>
-                        </td>
-                        <td class="p-4 {{ !$msg->is_read ? 'text-gray-200' : 'text-gray-400' }}">{{ $msg->subject }}</td>
-                        <td class="p-4 text-sm text-gray-400">{{ $msg->created_at->format('d/m H:i') }}</td>
-                        <td class="p-4 text-right">
-                            <a href="{{ route('admin.message.show', $msg->id) }}" class="bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 px-3 py-1.5 rounded-md font-bold text-sm transition-colors">Lire</a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="p-8 text-center text-gray-500 italic">Aucun message reçu.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
         </div>
     </div>
 </div>

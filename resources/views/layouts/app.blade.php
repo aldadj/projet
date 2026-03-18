@@ -3,117 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Site de Presse</title>
+    <title>ACTUPRESS - Information & Analyses</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f6f6f6; }
+    </style>
 </head>
-<body class="bg-white text-slate-900 antialiased font-sans">
-    <nav class="bg-slate-800/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-700 shadow-lg mb-8">
-        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
-            
-            {{-- Logo et Navigation --}}
-            <div class="flex items-center gap-10">
-                <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-                    <span class="text-3xl">📰</span>
-                    <span class="text-2xl font-bold text-white tracking-tight group-hover:text-blue-400 transition-colors">ACTU<span class="text-blue-500">PRESS</span></span>
-                </a>
-                
-                <div class="hidden md:flex items-center gap-6">
-                    <a href="{{ route('home') }}" class="text-sm font-bold uppercase tracking-wider transition-colors {{ request()->routeIs('home') && !request('search') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
-                        Accueil
-                    </a>
+<body class="bg-[#f6f6f6] text-[#212121] antialiased">
 
-                    @foreach($categories as $category)
-                        <a href="{{ route('category.show', $category->slug) }}" 
-                           class="text-sm font-bold uppercase tracking-wider transition-colors {{ request()->is('categorie/'.$category->slug) ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
-                            {{ $category->name }}
-                        </a>
-                    @endforeach
+    {{-- TOP BAR (Style BBC White) --}}
+    <header class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+            {{-- Logo --}}
+            <a href="{{ route('home') }}" class="flex items-center gap-2 group">
+                <div class="bg-[#bb1919] p-1 px-2 text-white font-black text-2xl tracking-tighter">ACTU</div>
+                <span class="text-2xl font-black tracking-tighter text-[#212121]">PRESS</span>
+            </a>
 
-                    <a href="{{ route('qsn') }}" class="text-sm font-bold uppercase tracking-wider transition-colors {{ request()->routeIs('qsn') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
-                        QSN
-                    </a>
-                    <a href="{{ route('contact') }}" class="text-sm font-bold uppercase tracking-wider transition-colors {{ request()->routeIs('contact') ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
-                        Contact
-                    </a>
-                </div>
-            </div>
-
-            {{-- Barre de recherche stylisée --}}
-            <form action="{{ route('home') }}" method="GET" class="hidden md:flex items-center relative group">
-                <input type="text" name="search" placeholder="Rechercher..." 
-                       class="bg-slate-900 border border-slate-600 text-slate-200 text-sm rounded-full pl-5 pr-10 py-2 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-64 transition-all"
-                       value="{{ request('search') }}">
-                <button type="submit" class="absolute right-3 text-slate-400 hover:text-white transition-colors">
-                    🔍
-                </button>
-            </form>
-
-            {{-- Bouton Menu Mobile --}}
-            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-2">
-                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-        </div>
-
-        {{-- Menu Mobile Déroulant --}}
-        <div id="mobile-menu" class="md:hidden bg-slate-800 border-t border-slate-700 absolute w-full left-0 top-20 shadow-xl z-50 transition-all duration-300 ease-in-out transform opacity-0 -translate-y-5 pointer-events-none">
-            <div class="flex flex-col p-4 space-y-4">
-                <form action="{{ route('home') }}" method="GET" class="relative">
-                    <input type="text" name="search" placeholder="Rechercher..." class="w-full bg-slate-900 border border-slate-600 text-slate-200 text-sm rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:border-blue-500" value="{{ request('search') }}">
-                    <button type="submit" class="absolute right-3 top-3 text-slate-400">🔍</button>
+            {{-- Auth & Search --}}
+            <div class="flex items-center gap-4">
+                <form action="{{ route('home') }}" method="GET" class="hidden md:relative md:block">
+                    <input type="text" name="search" placeholder="Rechercher" 
+                           class="bg-[#eeeeee] border-none text-sm px-4 py-2 w-48 focus:ring-2 focus:ring-[#bb1919] transition-all"
+                           value="{{ request('search') }}">
+                    <button type="submit" class="absolute right-2 top-2 text-gray-500 font-bold">🔍</button>
                 </form>
 
-                <a href="{{ route('home') }}" class="block text-slate-300 hover:text-white font-bold uppercase py-2 border-b border-slate-700">Accueil</a>
+                @guest
+                    <a href="{{ route('login') }}" class="flex items-center gap-1 text-sm font-bold border-l pl-4 border-gray-300 hover:text-[#bb1919]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="2"/></svg>
+                        Connexion
+                    </a>
+                @endguest
+
+                @auth
+                    <div class="flex items-center gap-3 border-l pl-4 border-gray-300">
+                        @if(auth()->user()->email === 'admin@exple.com')
+                            <a href="{{ route('admin.dashboard') }}" class="text-xs font-black uppercase tracking-tighter text-[#bb1919] hover:underline">Dashboard</a>
+                        @endif
+                        <a href="{{ route('profile.show') }}" class="text-xs font-black uppercase tracking-tighter hover:text-[#bb1919]">Mon Compte</a>
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="text-[#bb1919] text-xs font-black uppercase tracking-tighter">Sortir</button>
+                        </form>
+                    </div>
+                @endauth
+
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-[#212121]">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    {{-- NAVIGATION SECONDAIRE (Sticky & Black) --}}
+    <nav class="bg-[#bb1919] sticky top-0 z-50 shadow-md overflow-x-auto no-scrollbar">
+        <div class="container mx-auto px-4 flex items-center">
+            <div class="hidden md:flex">
+                <a href="{{ route('home') }}" class="px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('home') && !request('search') ? 'border-white' : 'border-transparent hover:bg-white/10 transition-colors' }}">
+                    Accueil
+                </a>
                 @foreach($categories as $category)
-                    <a href="{{ route('category.show', $category->slug) }}" class="block text-slate-300 hover:text-white font-bold uppercase py-2 border-b border-slate-700 pl-4 border-l-4 border-transparent hover:border-blue-500">
+                    <a href="{{ route('category.show', $category->slug) }}" 
+                       class="px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->is('categorie/'.$category->slug) ? 'border-white' : 'border-transparent hover:bg-white/10 transition-colors' }}">
                         {{ $category->name }}
                     </a>
                 @endforeach
-                <a href="{{ route('qsn') }}" class="block text-slate-300 hover:text-white font-bold uppercase py-2 border-b border-slate-700">QSN</a>
-                <a href="{{ route('contact') }}" class="block text-slate-300 hover:text-white font-bold uppercase py-2">Contact</a>
+                <a href="{{ route('qsn') }}" class="px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('qsn') ? 'border-white' : 'border-transparent hover:bg-white/10' }}">QSN</a>
+                <a href="{{ route('contact') }}" class="px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('contact') ? 'border-white' : 'border-transparent hover:bg-white/10' }}">Contact</a>
             </div>
         </div>
     </nav>
 
+    {{-- MENU MOBILE --}}
+    <div id="mobile-menu" class="hidden bg-[#212121] text-white fixed inset-0 z-[60] p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
+            <span class="font-black text-2xl uppercase tracking-tighter">Menu</span>
+            <button id="close-menu" class="p-2 bg-white/10 rounded-full">✕</button>
+        </div>
+        <div class="flex flex-col gap-6 text-xl font-bold">
+            <a href="{{ route('home') }}">Accueil</a>
+            @foreach($categories as $category)
+                <a href="{{ route('category.show', $category->slug) }}" class="border-l-4 border-[#bb1919] pl-4">{{ $category->name }}</a>
+            @endforeach
+            @if(auth()->check() && auth()->user()->email === 'admin@exple.com')
+                <a href="{{ route('admin.dashboard') }}" class="text-[#bb1919]">Dashboard Admin</a>
+            @endif
+            <hr class="border-white/10">
+            <a href="{{ route('qsn') }}" class="text-gray-400">À propos</a>
+            <a href="{{ route('contact') }}" class="text-gray-400">Contact</a>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 py-8 min-h-screen">
+        @if(session('success'))
+            <div class="bg-blue-600 text-white font-bold px-4 py-3 mb-8 flex justify-between items-center">
+                <span>{{ session('success') }}</span>
+                <button onclick="this.parentElement.remove()">✕</button>
+            </div>
+        @endif
+
+        @yield('content')
+    </main>
+
+    {{-- FOOTER STYLE BBC --}}
+    <footer class="bg-[#212121] text-white mt-20">
+        <div class="container mx-auto px-4 py-12">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 border-b border-white/10 pb-12">
+                <div class="max-w-xs">
+                    <div class="text-3xl font-black tracking-tighter mb-4">ACTUPRESS<span class="text-[#bb1919]">.</span></div>
+                    <p class="text-gray-400 text-sm leading-relaxed">L'information brute, analysée par nos experts. Une vision globale, un ancrage local.</p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="font-black text-xs uppercase tracking-widest text-gray-500 mb-4">Sections</h4>
+                        <ul class="text-sm space-y-2 font-bold">
+                            @foreach($categories->take(5) as $category)
+                                <li><a href="{{ route('category.show', $category->slug) }}" class="hover:underline">{{ $category->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-xs uppercase tracking-widest text-gray-500 mb-4">Légal</h4>
+                        <ul class="text-sm space-y-2 font-bold">
+                            <li><a href="{{ route('qsn') }}" class="hover:underline">Qui sommes-nous ?</a></li>
+                            <li><a href="{{ route('contact') }}" class="hover:underline">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                <p>&copy; {{ date('Y') }} ACTUPRESS. PROJET RÉALISÉ PAR ALDADJ TECH.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white transition-colors text-xs uppercase">Twitter</a>
+                    <a href="#" class="hover:text-white transition-colors text-xs uppercase">Facebook</a>
+                    <a href="#" class="hover:text-white transition-colors text-xs uppercase">YouTube</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('opacity-0');
-            menu.classList.toggle('-translate-y-5');
-            menu.classList.toggle('pointer-events-none');
-        });
+        // Toggle Menu Mobile
+        const btn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu');
+        const menu = document.getElementById('mobile-menu');
 
-        // Fonction de partage
-        async function shareArticle(title, url) {
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: title,
-                        text: 'Regarde cet article intéressant sur ActuPress !',
-                        url: url
-                    });
-                } catch (err) {
-                    console.log('Partage annulé');
-                }
-            } else {
-                // Fallback : Copier le lien
-                navigator.clipboard.writeText(url).then(function() {
-                    alert('Lien copié dans le presse-papier !');
-                }, function(err) {
-                    console.error('Erreur lors de la copie', err);
-                });
-            }
-        }
+        btn.addEventListener('click', () => menu.classList.remove('hidden'));
+        closeBtn.addEventListener('click', () => menu.classList.add('hidden'));
 
-        // Fonction de Like (AJAX)
+        // Script Like AJAX (Gardé de ta version précédente)
         async function toggleLike(btn, articleId) {
-            @guest
-                window.location.href = "{{ route('login') }}";
-                return;
-            @endguest
-
+            @guest window.location.href = "{{ route('login') }}"; return; @endguest
             try {
                 const response = await fetch(`/article/${articleId}/like`, {
                     method: 'POST',
@@ -123,55 +166,13 @@
                         'Accept': 'application/json'
                     },
                 });
-
                 const data = await response.json();
-                
-                // Mise à jour de l'UI
                 const countSpan = btn.querySelector('.likes-count');
                 countSpan.innerText = data.count;
-                
-                if (data.liked) {
-                    btn.classList.add('text-red-500');
-                    btn.classList.remove('text-gray-400');
-                } else {
-                    btn.classList.remove('text-red-500');
-                    btn.classList.add('text-gray-400');
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-            }
+                if (data.liked) { btn.classList.add('text-red-500'); } 
+                else { btn.classList.remove('text-red-500'); }
+            } catch (error) { console.error('Erreur:', error); }
         }
     </script>
-
-    <main class="container mx-auto px-4 min-h-screen py-6">
-        @yield('content')
-    </main>
-
-    <footer class="bg-slate-950 border-t border-slate-800 mt-16 py-10 text-slate-500 text-sm">
-    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="text-center md:text-left">
-            <span class="block text-lg font-bold text-slate-300 mb-1">ACTU<span class="text-blue-500">PRESS</span></span>
-            <p>&copy; {{ date('Y') }} - L'information en temps - ALDADJ TECH conception.</p>
-        </div>
-        
-        <div class="flex items-center gap-6">
-            @guest
-                <a href="{{ route('login') }}" class="hover:text-blue-400 transition-colors">Espace Admin</a>
-            @endguest
-
-            @auth
-                <div class="flex gap-4 items-center bg-slate-900 px-4 py-2 rounded-full border border-slate-700">
-                    <a href="{{ route('admin.dashboard') }}" class="text-blue-400 font-bold hover:text-blue-300 text-xs uppercase">Dashboard</a>
-                    <span class="text-slate-700">|</span>
-                    <form action="{{ route('logout') }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="text-red-500 hover:text-red-400 text-xs font-bold uppercase">Déconnexion</button>
-                    </form>
-                </div>
-            @endauth
-        </div>
-    </div>
-</footer>
-
 </body>
 </html>

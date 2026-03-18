@@ -24,17 +24,19 @@
     20 => 'Illuminate\\Translation\\TranslationServiceProvider',
     21 => 'Illuminate\\Validation\\ValidationServiceProvider',
     22 => 'Illuminate\\View\\ViewServiceProvider',
-    23 => 'CloudinaryLabs\\CloudinaryLaravel\\CloudinaryServiceProvider',
-    24 => 'Laravel\\Boost\\BoostServiceProvider',
-    25 => 'Laravel\\Mcp\\Server\\McpServiceProvider',
-    26 => 'Laravel\\Pail\\PailServiceProvider',
-    27 => 'Laravel\\Roster\\RosterServiceProvider',
-    28 => 'Laravel\\Sail\\SailServiceProvider',
-    29 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    30 => 'Carbon\\Laravel\\ServiceProvider',
-    31 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    32 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    33 => 'Pest\\Laravel\\PestServiceProvider',
+    23 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
+    24 => 'CloudinaryLabs\\CloudinaryLaravel\\CloudinaryServiceProvider',
+    25 => 'Laravel\\Boost\\BoostServiceProvider',
+    26 => 'Laravel\\Mcp\\Server\\McpServiceProvider',
+    27 => 'Laravel\\Pail\\PailServiceProvider',
+    28 => 'Laravel\\Roster\\RosterServiceProvider',
+    29 => 'Laravel\\Sail\\SailServiceProvider',
+    30 => 'Laravel\\Socialite\\SocialiteServiceProvider',
+    31 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    32 => 'Carbon\\Laravel\\ServiceProvider',
+    33 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    34 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    35 => 'Pest\\Laravel\\PestServiceProvider',
   ),
   'eager' => 
   array (
@@ -214,8 +216,13 @@
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'Illuminate\\Contracts\\Validation\\UncompromisedVerifier' => 'Illuminate\\Validation\\ValidationServiceProvider',
+    'Barryvdh\\LaravelIdeHelper\\Console\\GeneratorCommand' => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
+    'Barryvdh\\LaravelIdeHelper\\Console\\ModelsCommand' => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
+    'Barryvdh\\LaravelIdeHelper\\Console\\MetaCommand' => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
+    'Barryvdh\\LaravelIdeHelper\\Console\\EloquentCommand' => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
     'Laravel\\Sail\\Console\\InstallCommand' => 'Laravel\\Sail\\SailServiceProvider',
     'Laravel\\Sail\\Console\\PublishCommand' => 'Laravel\\Sail\\SailServiceProvider',
+    'Laravel\\Socialite\\Contracts\\Factory' => 'Laravel\\Socialite\\SocialiteServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
   ),
   'when' => 
@@ -259,7 +266,13 @@
     'Illuminate\\Validation\\ValidationServiceProvider' => 
     array (
     ),
+    'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider' => 
+    array (
+    ),
     'Laravel\\Sail\\SailServiceProvider' => 
+    array (
+    ),
+    'Laravel\\Socialite\\SocialiteServiceProvider' => 
     array (
     ),
     'Laravel\\Tinker\\TinkerServiceProvider' => 

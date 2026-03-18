@@ -2,87 +2,119 @@
 
 <?php $__env->startSection('content'); ?>
 <?php
+    // Couleurs BBC par catégorie
     $categoryColors = [
-        'sport' => 'bg-red-600',
-        'politique' => 'bg-blue-800',
-        'technologie' => 'bg-green-600',
-        'culture' => 'bg-purple-600',
-        'economie' => 'bg-yellow-600',
+        'sport' => 'bg-[#ffd230] text-black', // Le jaune sport typique
+        'politique' => 'bg-[#bb1919] text-white',
+        'technologie' => 'bg-[#1380a1] text-white',
+        'culture' => 'bg-[#a00062] text-white',
+        'economie' => 'bg-[#e4a42d] text-white',
     ];
+    $catStyle = $categoryColors[$category->slug] ?? 'bg-[#bb1919] text-white';
 ?>
 
-<div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-    <div>
-        <h1 class="text-3xl font-bold text-slate-900 uppercase border-b-4 border-blue-500 inline-block pb-2">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-[#f6f6f6] min-h-screen py-6">
+    
+    
+    <div class="flex items-center gap-0 mb-8">
+        <div class="<?php echo e($catStyle); ?> px-4 py-2 text-2xl font-bold uppercase tracking-tighter">
             <?php echo e($category->name); ?>
 
-        </h1>
-        <p class="text-slate-500 mt-2 text-lg">Retrouvez toute l'actualité et les dossiers de la section <?php echo e($category->name); ?>.</p>
+        </div>
+        <div class="flex-grow h-[2px] bg-gray-300"></div>
     </div>
-    <a href="<?php echo e(route('home')); ?>" class="text-slate-500 hover:text-slate-900 transition inline-flex items-center gap-2">
-        &larr; Retour à l'accueil
-    </a>
-</div>
 
-<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-    <?php $__empty_1 = true; $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-        <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col border border-gray-100 hover:-translate-y-1">
-            <?php if($article->image): ?>
-                <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="h-48 overflow-hidden block">
-                    <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>" alt="<?php echo e($article->title); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </a>
-            <?php endif; ?>
-            <div class="p-4 flex flex-col flex-grow">
+    
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        
+        <?php $__empty_1 = true; $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <?php if($index === 0): ?>
                 
-                <h3 class="text-lg font-bold mb-2 leading-tight group-hover:text-blue-600 transition-colors line-clamp-3 flex-grow text-slate-900">
-                    <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="hover:underline decoration-blue-500 underline-offset-2"><?php echo e($article->title); ?></a>
-                </h3>
+                <div class="md:col-span-8 group">
+                    <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="block overflow-hidden">
+                        <?php if($article->image): ?>
+                            <div class="relative aspect-video mb-4 overflow-hidden">
+                                <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                
+                            </div>
+                        <?php endif; ?>
+                        <h2 class="text-3xl md:text-5xl font-bold text-[#212121] leading-tight hover:underline decoration-[#bb1919] decoration-4 underline-offset-4 mb-4">
+                            <?php echo e($article->title); ?>
 
-                <?php if(!$article->image): ?>
-                    <p class="text-gray-600 text-sm line-clamp-4 mb-3">
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-4 line-clamp-3">
                         <?php echo e($article->content); ?>
 
                     </p>
-                    <a href="<?php echo e(route('article.show', $article->slug)); ?>" class="text-blue-600 text-xs font-bold uppercase hover:underline mt-auto block mb-2">Voir plus &rarr;</a>
-                <?php endif; ?>
+                    <div class="flex items-center gap-4 text-sm font-medium text-gray-400">
+                        <span class="flex items-center gap-1 border-r border-gray-300 pr-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6v6l4 2" stroke-width="2" stroke-linecap="round"/></svg>
+                            <?php echo e($article->created_at->diffForHumans()); ?>
 
-                <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
-                    <span class="text-xs text-gray-500 font-medium"><?php echo e($article->created_at->format('d/m/Y')); ?></span>
-                    
-                    
-                    <div class="flex items-center gap-3">
-                        <button onclick="toggleLike(this, <?php echo e($article->id); ?>)" class="flex items-center gap-1 transition <?php echo e($article->is_liked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'); ?>" title="J'aime">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="<?php echo e($article->is_liked ? 'currentColor' : 'none'); ?>" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
-                            <span class="text-xs font-bold likes-count"><?php echo e($article->likes_count); ?></span>
-                        </button>
-                        <button onclick="shareArticle('<?php echo e(addslashes($article->title)); ?>', '<?php echo e(route('article.show', $article->slug)); ?>')" class="text-gray-500 hover:text-blue-500 transition" title="Partager">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.287.696.287 1.093 0 .397-.107.769-.287 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
-                        </button>
-                        <?php if(auth()->guard()->check()): ?>
-                            <a href="<?php echo e(route('admin.article.edit', $article->id)); ?>" class="text-gray-500 hover:text-yellow-500" title="Modifier">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.691 1.127l-3.533 1.06a.75.75 0 00-.94-.94l1.06-3.533a4.5 4.5 0 011.127-1.691L16.862 4.487zm0 0L19.5 7.125" /></svg>
-                            </a>
-                            <form action="<?php echo e(route('admin.article.delete', $article->id)); ?>" method="POST" onsubmit="return confirm('Êtes-vous sûr ?');">
-                                <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                                <button type="submit" class="text-gray-500 hover:text-red-500" title="Supprimer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
-                                </button>
-                            </form>
-                        <?php endif; ?>
+                        </span>
+                        <span class="uppercase tracking-widest text-[#bb1919] font-black"><?php echo e($category->name); ?></span>
                     </div>
                 </div>
+            <?php else: ?>
+                
+                <div class="md:col-span-4 border-b md:border-b-0 md:border-l border-gray-200 md:pl-6 pb-6 group">
+                    <a href="<?php echo e(route('article.show', $article->slug)); ?>">
+                        <?php if($article->image): ?>
+                            <div class="aspect-video mb-3 overflow-hidden">
+                                <img src="<?php echo e(str_starts_with($article->image, 'http') ? $article->image : asset('storage/' . $article->image)); ?>" 
+                                     class="w-full h-full object-cover group-hover:brightness-90 transition-all">
+                            </div>
+                        <?php endif; ?>
+                        <h3 class="text-xl font-bold text-[#212121] leading-snug group-hover:text-[#bb1919] transition-colors">
+                            <?php echo e($article->title); ?>
+
+                        </h3>
+                    </a>
+                    <div class="mt-3 flex items-center gap-2 text-xs text-gray-400 font-bold uppercase tracking-tighter">
+                        <span class="w-2 h-2 rounded-full bg-gray-300"></span>
+                        <?php echo e($article->created_at->format('d M Y')); ?>
+
+                    </div>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <div class="col-span-12 py-20 text-center text-gray-400 uppercase font-black tracking-widest">
+                Aucune actualité disponible.
             </div>
+        <?php endif; ?>
+
+    </div>
+
+    
+    <div class="mt-16 pt-8 border-t-4 border-black flex justify-between items-center">
+        <div class="text-sm font-black uppercase tracking-tighter">Page <?php echo e($articles->currentPage()); ?> sur <?php echo e($articles->lastPage()); ?></div>
+        <div class="flex gap-1">
+            <?php echo e($articles->links()); ?>
+
         </div>
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-        <div class="col-span-3 py-10 text-center text-gray-400 italic">
-            Aucun article pour le moment dans cette catégorie.
-        </div>
-    <?php endif; ?>
+    </div>
 </div>
 
-<div class="mt-10">
-    <?php echo e($articles->links()); ?>
-
-</div>
+<style>
+    /* Simulation de la police BBC Reith */
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #f6f6f6;
+    }
+    
+    /* Customization de la pagination Laravel pour coller au style */
+    .pagination nav { display: flex; gap: 2px; }
+    .pagination span, .pagination a { 
+        padding: 8px 16px; 
+        background: black; 
+        color: white; 
+        font-weight: 900;
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+    .pagination .active span { background: #bb1919; }
+</style>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\alisn\Desktop\LARAVEL\projet\resources\views/category.blade.php ENDPATH**/ ?>

@@ -23,19 +23,18 @@ class ArticleController extends Controller
                                 ->orWhere('content', 'LIKE', "%{$search}%")
                                 ->latest()
                                 ->get();
+            $headlines = collect();
+        } else {
+            // Récupérer les 5 derniers articles pour le slider "À la une"
+            $headlines = Article::withCount('likes')
+                        ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
+                        ->latest()->take(5)->get();
             
-            return view('search', compact('articles', 'search', 'categories'));
+            // Récupérer tous les articles pour la grille
+            $articles = Article::withCount('likes')
+                        ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
+                        ->latest()->take(999)->get();
         }
-
-        // Récupérer les 5 derniers articles pour le slider "À la une"
-        $headlines = Article::withCount('likes')
-                    ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
-                    ->latest()->take(5)->get();
-        
-        // Récupérer tous les articles pour la grille
-        $articles = Article::withCount('likes')
-                    ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
-                    ->latest()->take(999)->get();
 
         return view('welcome', compact('headlines', 'articles', 'categories'));
     }
@@ -55,7 +54,6 @@ class ArticleController extends Controller
                             ->get();
 
         $categories = Category::all();
-
         return view('article', compact('article', 'similaires', 'categories'));
     }
 
@@ -69,7 +67,6 @@ class ArticleController extends Controller
                     ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
                     ->latest()->paginate(6); 
         $categories = Category::all();
-
         return view('category', compact('category', 'articles', 'categories'));
     }
 

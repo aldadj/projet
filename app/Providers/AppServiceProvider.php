@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Providers;
-use Illuminate\Support\Facades\URL;
-
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View; // Import important
+use App\Models\Category; // Import de ton modèle
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,8 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') === 'production') {
-        URL::forceScheme('https');
-    }
+        // On partage la variable $categories avec TOUTES les vues du site
+        View::composer('*', function ($view) {
+            $view->with('categories', Category::all());
+        });
     }
 }
