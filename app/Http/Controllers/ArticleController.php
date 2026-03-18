@@ -11,29 +11,31 @@ use Illuminate\Support\Facades\Auth;
 class ArticleController extends Controller
 {
     /**
-     * Affiche la page d'accueil avec recherche et sections.
+     * Affiche la page d'accueil avec tous les articles.
      */
     public function index(Request $request)
     {
         $search = $request->input('search');
         $categories = Category::all();
 
+        // Base de la requête pour les likes
+        $query = Article::withCount('likes')
+            ->withExists(['likes as is_liked' => function($q) { 
+                $q->where('user_id', Auth::id()); 
+            }]);
+
         if ($search) {
-            $articles = Article::where('title', 'LIKE', "%{$search}%")
-                                ->orWhere('content', 'LIKE', "%{$search}%")
-                                ->latest()
-                                ->get();
+            $articles = $query->where('title', 'LIKE', "%{$search}%")
+                              ->orWhere('content', 'LIKE', "%{$search}%")
+                              ->latest()
+                              ->get();
             $headlines = collect();
         } else {
-            // Récupérer les 5 derniers articles pour le slider "À la une"
-            $headlines = Article::withCount('likes')
-                        ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
-                        ->latest()->take(5)->get();
+            // Slider (Top 5)
+            $headlines = (clone $query)->latest()->take(5)->get();
             
-            // Récupérer tous les articles pour la grille
-            $articles = Article::withCount('likes')
-                        ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
-                        ->latest()->take(999)->get();
+            // Grille (Tous les articles)
+            $articles = $query->latest()->get(); 
         }
 
         return view('welcome', compact('headlines', 'articles', 'categories'));
@@ -45,7 +47,9 @@ class ArticleController extends Controller
     public function show($slug)
     {
         $article = Article::withCount('likes')
-                    ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
+                    ->withExists(['likes as is_liked' => function($q) { 
+                        $q->where('user_id', Auth::id()); 
+                    }])
                     ->where('slug', $slug)->firstOrFail();
 
         $similaires = Article::where('category_id', $article->category_id)
@@ -58,20 +62,21 @@ class ArticleController extends Controller
     }
 
     /**
-     * Filtre les articles par catégorie.
+     * Filtre les articles par catégorie (Sans pagination).
      */
     public function category($slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
-        $articles = $category->articles()->withCount('likes')
-                    ->withExists(['likes as is_liked' => function($q) { $q->where('user_id', Auth::id()); }])
-                    ->latest()->paginate(6); 
+        
+        $articles = $category->articles()
+            ->withCount('likes')
+            ->withExists(['likes as is_liked' => function($q) { 
+                $q->where('user_id', Auth::id()); 
+            }])
+            ->latest()
+            ->get(); // On récupère tout sans pagination
+
         $categories = Category::all();
         return view('category', compact('category', 'articles', 'categories'));
     }
-
-    /**
-     * Enregistre un nouvel article (Upload vers Cloudinary).
-     */
-   
 }
