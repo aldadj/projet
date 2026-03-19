@@ -32,13 +32,14 @@
         </div>
 
         
-        <div class="bg-[#f8f8f8] p-10 border-b md:border-b-0 md:border-r border-gray-200 group">
+        <a href="#messages-section" class="bg-[#f8f8f8] p-10 border-b md:border-b-0 md:border-r border-gray-200 group block hover:bg-gray-100 transition-all">
             <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4 group-hover:text-blue-600 transition-colors">Boîte de Réception</p>
             <div class="flex items-baseline gap-4">
                 <p class="text-6xl font-black text-[#212121] tracking-tighter"><?php echo e($unread_messages ?? 0); ?></p>
                 <span class="bg-blue-600 text-white text-[10px] px-2 py-1 font-black uppercase tracking-tighter">Non lus</span>
             </div>
-        </div>
+            <p class="text-[9px] font-bold text-blue-600 uppercase mt-4 tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">Cliquer pour voir les messages ↓</p>
+        </a>
 
         
         <div class="bg-[#212121] p-10 group relative overflow-hidden min-h-[180px] flex flex-col justify-center">
@@ -49,7 +50,6 @@
                     Accéder aux réglages →
                 </a>
             </div>
-            
             <span class="absolute -right-4 -bottom-4 text-white opacity-5 text-8xl font-black italic select-none">GEAR</span>
         </div>
     </div>
@@ -65,61 +65,61 @@
         </div>
     </div>
     
-    <div class="border-t-4 border-[#212121] pt-12">
+    
+    <div id="messages-section" class="border-t-4 border-[#212121] pt-12 scroll-mt-10">
         <div class="flex items-center justify-between mb-8">
             <h2 class="text-2xl font-black uppercase tracking-tighter text-[#212121]">Correspondance Lecteurs</h2>
         </div>
 
-        <div class="bg-white border border-gray-200 overflow-hidden">
+        <div class="bg-white border border-gray-200 overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-[#212121] text-white text-[10px] uppercase font-black tracking-widest">
-                            <th class="px-8 py-5">Source</th>
-                            <th class="px-8 py-5">Sujet</th>
-                            <th class="px-8 py-5 text-center">Date</th>
-                            <th class="px-8 py-5 text-right">Actions</th>
+                            <th class="px-8 py-5">Source / Expéditeur</th>
+                            <th class="px-8 py-5">Sujet du Message</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <?php $__empty_1 = true; $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <tr class="hover:bg-gray-50 transition-colors group">
+                            
+                            <tr onclick="window.location='<?php echo e(route('admin.message.show', $message->id)); ?>'" 
+                                class="hover:bg-gray-50 transition-colors group cursor-pointer">
+                                
                                 <td class="px-8 py-6">
                                     <div class="flex items-center gap-3">
-                                        
                                         <?php if(!$message->is_read): ?>
                                             <span class="relative flex h-2 w-2">
                                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#bb1919] opacity-75"></span>
                                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-[#bb1919]"></span>
                                             </span>
                                         <?php else: ?>
-                                            
                                             <span class="h-2 w-2 rounded-full bg-gray-200"></span>
                                         <?php endif; ?>
                                         
-                                        <span class="text-sm font-black text-[#212121] uppercase tracking-tighter <?php echo e(!$message->is_read ? 'text-[#bb1919]' : ''); ?>">
-                                            <?php echo e($message->name); ?>
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-black text-[#212121] uppercase tracking-tighter <?php echo e(!$message->is_read ? 'text-[#bb1919]' : ''); ?>">
+                                                <?php echo e($message->name); ?>
 
-                                        </span>
+                                            </span>
+                                            <span class="text-[9px] text-gray-400 font-bold tracking-widest uppercase"><?php echo e($message->created_at->format('d M Y à H:i')); ?></span>
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="px-8 py-6 text-sm <?php echo e(!$message->is_read ? 'font-black text-[#212121]' : 'font-bold text-gray-500'); ?> italic">
-                                    "<?php echo e(Str::limit($message->subject, 50)); ?>"
-                                </td>
-                                <td class="px-8 py-6 text-center text-[10px] font-black text-gray-400">
-                                    <?php echo e($message->created_at->format('d/m/Y')); ?>
 
-                                </td>
-                                <td class="px-8 py-6 text-right">
-                                    <div class="flex justify-end gap-2">
-                                        <a href="<?php echo e(route('admin.message.show', $message->id)); ?>" class="bg-gray-100 text-[#212121] text-[10px] font-black py-2 px-4 uppercase tracking-widest hover:bg-[#212121] hover:text-white transition-all shadow-sm">
-                                            Ouvrir
-                                        </a>
+                                <td class="px-8 py-6">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm <?php echo e(!$message->is_read ? 'font-black text-[#212121]' : 'font-bold text-gray-500'); ?> italic">
+                                            "<?php echo e(Str::limit($message->subject, 80)); ?>"
+                                        </span>
+                                        <span class="text-[#212121] opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-black uppercase tracking-widest">
+                                            Lire le message →
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                            <tr><td colspan="4" class="py-10 text-center text-gray-400 uppercase text-[10px] font-black">Aucun message</td></tr>
+                            <tr><td colspan="2" class="py-10 text-center text-gray-400 uppercase text-[10px] font-black">Aucun message dans la boîte</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -127,5 +127,12 @@
         </div>
     </div>
 </div>
+
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\alisn\Desktop\LARAVEL\projet\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

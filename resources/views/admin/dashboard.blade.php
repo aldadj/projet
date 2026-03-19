@@ -19,7 +19,7 @@
         </a>
     </div>
 
-    {{-- LES 3 CARTES (Le bloc que tu veux retrouver) --}}
+    {{-- LES 3 CARTES --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-0 mb-16 border border-gray-200 shadow-sm">
         
         {{-- Carte 1 : Articles --}}
@@ -31,14 +31,15 @@
             </div>
         </div>
 
-        {{-- Carte 2 : Messages --}}
-        <div class="bg-[#f8f8f8] p-10 border-b md:border-b-0 md:border-r border-gray-200 group">
+        {{-- Carte 2 : Messages (DEVENUE UN LIEN DE SCROLL) --}}
+        <a href="#messages-section" class="bg-[#f8f8f8] p-10 border-b md:border-b-0 md:border-r border-gray-200 group block hover:bg-gray-100 transition-all">
             <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4 group-hover:text-blue-600 transition-colors">Boîte de Réception</p>
             <div class="flex items-baseline gap-4">
                 <p class="text-6xl font-black text-[#212121] tracking-tighter">{{ $unread_messages ?? 0 }}</p>
                 <span class="bg-blue-600 text-white text-[10px] px-2 py-1 font-black uppercase tracking-tighter">Non lus</span>
             </div>
-        </div>
+            <p class="text-[9px] font-bold text-blue-600 uppercase mt-4 tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">Cliquer pour voir les messages ↓</p>
+        </a>
 
         {{-- Carte 3 : BOUTON QSN --}}
         <div class="bg-[#212121] p-10 group relative overflow-hidden min-h-[180px] flex flex-col justify-center">
@@ -49,12 +50,11 @@
                     Accéder aux réglages →
                 </a>
             </div>
-            {{-- Décoration icône GEAR --}}
             <span class="absolute -right-4 -bottom-4 text-white opacity-5 text-8xl font-black italic select-none">GEAR</span>
         </div>
     </div>
 
-    {{-- Reste du Dashboard (Articles & Messages) --}}
+    {{-- Articles --}}
     <div class="mb-20">
         <div class="flex items-center gap-4 mb-8">
             <h2 class="text-2xl font-black uppercase tracking-tighter text-[#212121]">Archives des Articles</h2>
@@ -65,59 +65,60 @@
         </div>
     </div>
     
-    <div class="border-t-4 border-[#212121] pt-12">
+    {{-- Messages (AVEC ID POUR LE SCROLL) --}}
+    <div id="messages-section" class="border-t-4 border-[#212121] pt-12 scroll-mt-10">
         <div class="flex items-center justify-between mb-8">
             <h2 class="text-2xl font-black uppercase tracking-tighter text-[#212121]">Correspondance Lecteurs</h2>
         </div>
 
-        <div class="bg-white border border-gray-200 overflow-hidden">
+        <div class="bg-white border border-gray-200 overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-[#212121] text-white text-[10px] uppercase font-black tracking-widest">
-                            <th class="px-8 py-5">Source</th>
-                            <th class="px-8 py-5">Sujet</th>
-                            <th class="px-8 py-5 text-center">Date</th>
-                            <th class="px-8 py-5 text-right">Actions</th>
+                            <th class="px-8 py-5">Source / Expéditeur</th>
+                            <th class="px-8 py-5">Sujet du Message</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse($messages as $message)
-                            <tr class="hover:bg-gray-50 transition-colors group">
+                            {{-- Ligne cliquable --}}
+                            <tr onclick="window.location='{{ route('admin.message.show', $message->id) }}'" 
+                                class="hover:bg-gray-50 transition-colors group cursor-pointer">
+                                
                                 <td class="px-8 py-6">
                                     <div class="flex items-center gap-3">
-                                        {{-- Le petit point sur les messages non lus --}}
                                         @if(!$message->is_read)
                                             <span class="relative flex h-2 w-2">
                                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#bb1919] opacity-75"></span>
                                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-[#bb1919]"></span>
                                             </span>
                                         @else
-                                            {{-- Point gris discret pour les messages lus, ou laisser vide --}}
                                             <span class="h-2 w-2 rounded-full bg-gray-200"></span>
                                         @endif
                                         
-                                        <span class="text-sm font-black text-[#212121] uppercase tracking-tighter {{ !$message->is_read ? 'text-[#bb1919]' : '' }}">
-                                            {{ $message->name }}
-                                        </span>
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-black text-[#212121] uppercase tracking-tighter {{ !$message->is_read ? 'text-[#bb1919]' : '' }}">
+                                                {{ $message->name }}
+                                            </span>
+                                            <span class="text-[9px] text-gray-400 font-bold tracking-widest uppercase">{{ $message->created_at->format('d M Y à H:i') }}</span>
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="px-8 py-6 text-sm {{ !$message->is_read ? 'font-black text-[#212121]' : 'font-bold text-gray-500' }} italic">
-                                    "{{ Str::limit($message->subject, 50) }}"
-                                </td>
-                                <td class="px-8 py-6 text-center text-[10px] font-black text-gray-400">
-                                    {{ $message->created_at->format('d/m/Y') }}
-                                </td>
-                                <td class="px-8 py-6 text-right">
-                                    <div class="flex justify-end gap-2">
-                                        <a href="{{ route('admin.message.show', $message->id) }}" class="bg-gray-100 text-[#212121] text-[10px] font-black py-2 px-4 uppercase tracking-widest hover:bg-[#212121] hover:text-white transition-all shadow-sm">
-                                            Ouvrir
-                                        </a>
+
+                                <td class="px-8 py-6">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm {{ !$message->is_read ? 'font-black text-[#212121]' : 'font-bold text-gray-500' }} italic">
+                                            "{{ Str::limit($message->subject, 80) }}"
+                                        </span>
+                                        <span class="text-[#212121] opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-black uppercase tracking-widest">
+                                            Lire le message →
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="4" class="py-10 text-center text-gray-400 uppercase text-[10px] font-black">Aucun message</td></tr>
+                            <tr><td colspan="2" class="py-10 text-center text-gray-400 uppercase text-[10px] font-black">Aucun message dans la boîte</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -125,4 +126,11 @@
         </div>
     </div>
 </div>
+
+{{-- Petit script pour un scroll fluide si pas déjà actif --}}
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
 @endsection

@@ -19,7 +19,6 @@
 
     <form action="<?php echo e(route('admin.article.update', $article->id)); ?>" method="POST" enctype="multipart/form-data">
         <?php echo csrf_field(); ?>
-        <?php echo method_field('PUT'); ?>
         
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
@@ -68,12 +67,6 @@
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
-
-                        <label class="flex items-center gap-3 p-3 bg-[#333] cursor-pointer hover:bg-[#444] transition-colors group">
-                            <input type="checkbox" name="is_headline" class="w-5 h-5 accent-[#bb1919]" <?php echo e($article->is_headline ? 'checked' : ''); ?>>
-                            <span class="text-xs font-black uppercase tracking-tighter text-gray-300 group-hover:text-white">Mettre à la une (Headline)</span>
-                        </label>
-
                         <div class="pt-4">
                             <button type="submit" class="w-full bg-[#bb1919] hover:bg-white hover:text-[#212121] text-white font-black py-4 uppercase text-xs tracking-[0.2em] transition-all transform active:scale-95 shadow-xl">
                                 Enregistrer les modifications

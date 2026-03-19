@@ -64,7 +64,7 @@
             </div>
 
             
-            <div class="bg-[#fcfcfc] border border-gray-100 p-6 h-[900px] flex flex-col relative shadow-sm">
+            <div class="bg-[#fcfcfc] border border-gray-100 p-6 h-96 flex flex-col relative shadow-sm">
                 <div class="absolute top-0 left-0 w-full h-1 bg-[#bb1919]"></div>
                 <h2 class="font-black text-xs uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
                     <span class="relative flex h-2 w-2">
