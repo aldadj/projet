@@ -133,6 +133,7 @@
     html {
         scroll-behavior: smooth;
     }
+    nav { position: sticky; top: 0; z-index: 50; }
 </style>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\alisn\Desktop\LARAVEL\projet\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

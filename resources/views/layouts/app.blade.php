@@ -13,6 +13,7 @@
 </head>
 <body class="bg-[#f6f6f6] text-[#212121] antialiased overflow-x-hidden">
 
+    <div class="sticky top-0 z-50 w-full">
     {{-- TOP BAR (Style BBC White) --}}
     <header class="bg-white border-b border-gray-200">
         <div class="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -51,6 +52,13 @@
                     </div>
                 @endauth
 
+                {{-- Recherche Mobile (Petit, à gauche du menu) --}}
+                <form action="{{ route('home') }}" method="GET" class="md:hidden">
+                    <input type="text" name="search" placeholder="RECH..." 
+                           class="bg-[#f4f4f4] text-[#212121] text-[10px] font-black py-2 px-2 w-16 uppercase border-none focus:ring-1 focus:ring-[#bb1919] rounded-sm transition-all"
+                           value="{{ request('search') }}">
+                </form>
+
                 <button id="mobile-menu-btn" class="md:hidden p-2 text-[#212121]">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
@@ -59,48 +67,99 @@
     </header>
 
     {{-- NAVIGATION SECONDAIRE (Sticky & Black) --}}
-    <nav class="bg-[#bb1919] sticky top-0 z-50 shadow-md overflow-x-auto no-scrollbar">
+    <nav class="hidden md:block bg-[#bb1919] shadow-md overflow-x-auto no-scrollbar">
         <div class="container mx-auto px-4 flex items-center">
-            <div class="hidden md:flex">
-                <a href="{{ route('home') }}" class="px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('home') && !request('search') ? 'border-white' : 'border-transparent hover:bg-white/10 transition-colors' }}">
+            <div class="flex items-center">
+                <a href="{{ route('home') }}" class="whitespace-nowrap px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('home') && !request('search') ? 'border-white' : 'border-transparent hover:bg-white/10 transition-colors' }}">
                     Accueil
                 </a>
                 @foreach($categories as $category)
                     <a href="{{ route('category.show', $category->slug) }}" 
-                       class="px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->is('categorie/'.$category->slug) ? 'border-white' : 'border-transparent hover:bg-white/10 transition-colors' }}">
+                       class="whitespace-nowrap px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->is('categorie/'.$category->slug) ? 'border-white' : 'border-transparent hover:bg-white/10 transition-colors' }}">
                         {{ $category->name }}
                     </a>
                 @endforeach
-                <a href="{{ route('qsn') }}" class="px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('qsn') ? 'border-white' : 'border-transparent hover:bg-white/10' }}">QSN</a>
-                <a href="{{ route('contact') }}" class="px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('contact') ? 'border-white' : 'border-transparent hover:bg-white/10' }}">Contact</a>
+                <a href="{{ route('qsn') }}" class="whitespace-nowrap px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('qsn') ? 'border-white' : 'border-transparent hover:bg-white/10' }}">QSN</a>
+                <a href="{{ route('contact') }}" class="whitespace-nowrap px-4 py-3 text-sm font-bold text-white border-b-4 {{ request()->routeIs('contact') ? 'border-white' : 'border-transparent hover:bg-white/10' }}">Contact</a>
             </div>
         </div>
     </nav>
+    </div>
 
     {{-- MENU MOBILE --}}
-    <div id="mobile-menu" class="hidden bg-[#212121] text-white fixed inset-0 z-[60] p-6 overflow-y-auto">
-        <div class="flex justify-between items-center mb-8">
-            <span class="font-black text-2xl uppercase tracking-tighter">Menu</span>
-            <button id="close-menu" class="p-2 bg-white/10 rounded-full">✕</button>
+    <div id="mobile-menu" class="hidden fixed inset-0 z-[60] bg-[#121212] text-white overflow-y-auto">
+        {{-- Header Menu --}}
+        <div class="sticky top-0 z-10 bg-[#121212]/95 backdrop-blur border-b border-white/5 px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="bg-[#bb1919] text-white text-xs font-black px-2 py-1">ACTU</span>
+                <span class="font-black text-xl tracking-tighter">MENU</span>
+            </div>
+            <button id="close-menu" class="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
         </div>
-        <div class="flex flex-col gap-6 text-xl font-bold">
-            <a href="{{ route('home') }}">Accueil</a>
-            @foreach($categories as $category)
-                <a href="{{ route('category.show', $category->slug) }}" class="border-l-4 border-[#bb1919] pl-4">{{ $category->name }}</a>
-            @endforeach
-            @if(auth()->check() && auth()->user()->email === 'admin@exple.com')
-                <a href="{{ route('admin.dashboard') }}" class="text-[#bb1919]">Dashboard Admin</a>
-            @endif
-            @auth
-                <a href="{{ route('profile.show') }}">Mon Compte</a>
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="text-[#bb1919]">Se déconnecter</button>
-                </form>
-            @endauth
-            <hr class="border-white/10">
-            <a href="{{ route('qsn') }}" class="text-gray-400">À propos</a>
-            <a href="{{ route('contact') }}" class="text-gray-400">Contact</a>
+
+        <div class="p-6 space-y-8">
+            {{-- Navigation Principale --}}
+            <div class="flex flex-col gap-2">
+                <a href="{{ route('home') }}" class="text-2xl font-black tracking-tight py-2 {{ request()->routeIs('home') ? 'text-[#bb1919]' : 'hover:text-[#bb1919] transition-colors' }}">
+                    Accueil
+                </a>
+                <div class="pl-4 border-l-2 border-white/10 flex flex-col gap-3 mt-2">
+                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Rubriques</span>
+                    @foreach($categories as $category)
+                        <a href="{{ route('category.show', $category->slug) }}" class="text-lg font-bold text-gray-300 hover:text-white transition-colors">
+                            {{ $category->name }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Espace Personnel (Déplacé vers le bas pour la hiérarchie) --}}
+            <div class="pt-6 border-t border-white/10">
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 block">Espace Personnel</span>
+                @auth
+                    <div class="bg-white/5 rounded-lg p-4 border border-white/5">
+                        <a href="{{ route('profile.show') }}" class="flex items-center gap-3 mb-4 border-b border-white/10 pb-3 hover:bg-white/5 transition-colors rounded-lg -mx-2 px-2">
+                            <div class="w-8 h-8 rounded-full bg-[#bb1919] flex items-center justify-center text-xs font-bold text-white">
+                                {{ substr(auth()->user()->name, 0, 1) }}
+                            </div>
+                            <div class="leading-tight">
+                                <div class="font-bold text-sm text-white">{{ auth()->user()->name }}</div>
+                                <div class="text-[10px] text-gray-400">Connecté</div>
+                            </div>
+                        </a>
+                        <div class="flex flex-col gap-3 text-sm font-bold">
+                            @if(auth()->user()->email === 'admin@exple.com')
+                                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 text-[#bb1919] hover:underline">
+                                    <span>Dashboard Admin</span>
+                                </a>
+                            @endif
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="text-gray-400 hover:text-[#bb1919] transition-colors text-xs uppercase tracking-wider">Se déconnecter</button>
+                            </form>
+                        </div>
+                    </div>
+                @else
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="{{ route('login') }}" class="flex justify-center items-center py-3 bg-white text-black font-black text-xs uppercase tracking-wide hover:bg-gray-200 transition-colors rounded-sm">
+                            Connexion
+                        </a>
+                        @if(Route::has('register'))
+                            <a href="{{ route('register') }}" class="flex justify-center items-center py-3 border border-white/20 font-black text-xs uppercase tracking-wide hover:border-white transition-colors rounded-sm">
+                                Inscription
+                            </a>
+                        @endif
+                    </div>
+                @endauth
+            </div>
+
+            {{-- Liens Footer --}}
+            <div class="flex flex-col gap-3 pt-2 text-sm font-bold text-gray-500">
+                <a href="{{ route('qsn') }}" class="hover:text-white transition-colors">Qui sommes-nous ?</a>
+                <a href="{{ route('contact') }}" class="hover:text-white transition-colors">Contact</a>
+            </div>
         </div>
     </div>
 
@@ -115,7 +174,7 @@
         @yield('content')
     </main>
 
-    {{-- FOOTER STYLE BBC --}}
+    {{-- FOOTER--}}
     <footer class="bg-[#212121] text-white mt-20">
         <div class="container mx-auto px-4 py-12">
             <div class="flex flex-col md:flex-row justify-between items-start gap-12 border-b border-white/10 pb-12">
