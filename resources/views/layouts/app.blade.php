@@ -14,7 +14,7 @@
 <body class="bg-[#f6f6f6] text-[#212121] antialiased overflow-x-hidden">
 
     <div class="sticky top-0 z-50 w-full">
-    {{-- TOP BAR (Style BBC White) --}}
+    {{-- TOP BAR --}}
     <header class="bg-white border-b border-gray-200">
         <div class="container mx-auto px-4 h-16 flex items-center justify-between">
             {{-- Logo --}}
@@ -31,11 +31,10 @@
                            value="{{ request('search') }}">
                     <button type="submit" class="absolute right-2 top-2 text-gray-500 font-bold">🔍</button>
                 </form>
-
+                {{-- icone connexion --}}
                 @guest
                     <a href="{{ route('login') }}" class="flex items-center gap-1 text-sm font-bold border-l pl-4 border-gray-300 hover:text-[#bb1919]">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="2"/></svg>
-                        Connexion
                     </a>
                 @endguest
 
@@ -115,7 +114,7 @@
                 </div>
             </div>
 
-            {{-- Espace Personnel (Déplacé vers le bas pour la hiérarchie) --}}
+            {{-- Espace Personnel --}}
             <div class="pt-6 border-t border-white/10">
                 <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 block">Espace Personnel</span>
                 @auth
