@@ -42,7 +42,8 @@ class AdminController extends Controller
 
     public function editQsn()
     {
-        $qsn = Setting::where('key', 'qsn_content')->firstOrFail();
+        // Utilise firstOrNew pour éviter l'erreur 500 si la ligne n'existe pas encore
+        $qsn = Setting::firstOrNew(['key' => 'qsn_content']);
         $categories = Category::all();
         
         return view('admin.edit_qsn', compact('qsn', 'categories'));
@@ -50,9 +51,11 @@ class AdminController extends Controller
 
     public function updateQsn(Request $request)
     {
-        Setting::where('key', 'qsn_content')->update([
-            'value' => $request->value
-        ]);
+        // UpdateOrCreate permet de créer la ligne si elle n'existe pas
+        Setting::updateOrCreate(
+            ['key' => 'qsn_content'],
+            ['value' => $request->value]
+        );
         return back()->with('success', 'Page QSN mise à jour !');
     }
 

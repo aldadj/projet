@@ -15,10 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Setting::create([
-        'key' => 'qsn_content',
-        'value' => 'Bienvenue sur notre plateforme de presse. Nous sommes dédiés à fournir une information fiable et en temps réel...'
-    ]);
+        \App\Models\Setting::firstOrCreate(
+            ['key' => 'qsn_content'],
+            ['value' => 'Bienvenue sur notre plateforme de presse. Nous sommes dédiés à fournir une information fiable et en temps réel...']
+        );
 
         $this->call([
         CategorySeeder::class,
